@@ -1,8 +1,6 @@
-
-
-class SimpleHTMLParser(object):
+class NaiveHTMLParser(object):
     """
-    A simple HTML parser for testing.
+    A naive HTML parser for testing.
 
     Not suitable for harsh cases, and the time efficiency is not considered.
 
@@ -16,14 +14,14 @@ class SimpleHTMLParser(object):
 
     def parse(self, content, parent=None):
         if parent is None:
-            _, children = self.parse(content, self.body)
             self.body = {
-                'trunk': ('body'),
-                'leaves': []
+                'elem': ('body'),
+                'children': []
             }
-            return
-        if content == '':
+            self.parse(content, self.body)
             return None
+        if content == '':
+            return 0
         i = 0
         while i < len(content):
             first = i
@@ -31,30 +29,35 @@ class SimpleHTMLParser(object):
                 i += 1
             if first != i:
                 text = content[first:i]
-                parent['leaves'].append(('text', text))
+                if text.strip() != '':
+                    parent['children'].append(('text', text))
             if i == len(content):
                 break
             first = i
-            while content[i] != '>':
+            while i < len(content) and content[i] != '>':
                 i += 1
-            parts = map(lambda x: len(x) > 0, content[first + 1:i].split(' '))
-            if parts[0] == '/':
+            parts = filter(lambda x: len(x) > 0, content[first + 1:i].replace('\n', ' ').split(' '))
+            if parts[0][0] == '/':
                 return i + 1
             attrs = {}
             for part in parts[1:]:
                 if part != '/':
                     if '=' in part:
-                        key, val = part.split('=')
+                        strs = part.split('=')
+                        key = strs[0]
+                        val = '='.join(strs[1:])
+                        if len(val) >= 2 and val[0] == '"' and val[-1] == '"':
+                            val = val[1:-1]
                         attrs[key] = val
                     else:
                         attrs[part] = None
             if parts[-1] == '/':
-                parent['leaves'].append(('tag', parts[0], attrs))
+                parent['children'].append(('tag', parts[0], attrs))
             else:
                 leaf = {
-                    'trunk': ('tag', parts[0], attrs),
-                    'leaves': [],
+                    'elem': ('tag', parts[0], attrs),
+                    'children': [],
                 }
-                i += self.parse(content[i + 1:], leaf)
-                parent['leaves'].append(leaf)
+                i += self.parse(content[i + 1:], leaf) + 1
+                parent['children'].append(leaf)
         return len(content)
