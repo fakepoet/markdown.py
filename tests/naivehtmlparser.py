@@ -36,7 +36,10 @@ class NaiveHTMLParser(object):
             first = i
             while i < len(content) and content[i] != '>':
                 i += 1
-            parts = filter(lambda x: len(x) > 0, content[first + 1:i].replace('\n', ' ').split(' '))
+            parts = list(filter(
+                lambda x: len(x) > 0,
+                content[first + 1:i].replace('\n', ' ').split(' ')
+            ))
             if parts[0][0] == '/':
                 return i + 1
             attrs = {}

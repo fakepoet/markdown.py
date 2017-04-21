@@ -1,5 +1,5 @@
 #!/usr/env/bin python
-# coding: utf-8
+# coding=utf-8
 import os
 import codecs
 import unittest
@@ -41,15 +41,15 @@ class TestNaiveHTMLParser(unittest.TestCase):
                     self.parser.parse(reader.read())
 
     def test_common_122(self):
-        text = u'<div id="foo"\n*hi*\n'
+        text = '<div id="foo"\n*hi*\n'
         self.parser.parse(text)
         expect = {
             'elem': 'body',
             'children': [
                 {
-                    'elem': ('tag', u'div', {
-                        u'id': u'foo',
-                        u'*hi*': None
+                    'elem': ('tag', 'div', {
+                        'id': 'foo',
+                        '*hi*': None
                     }), 'children': []
                 }
             ]
@@ -57,20 +57,20 @@ class TestNaiveHTMLParser(unittest.TestCase):
         self.assertEqual(expect, self.parser.body)
 
     def test_common_295(self):
-        text = u'<p><a href="http://example.com?find=%5C*">http://example.com?find=\\*</a></p>\n'
+        text = '<p><a href="http://example.com?find=%5C*">http://example.com?find=\\*</a></p>\n'
         self.parser.parse(text)
         expect = {
             'elem': 'body',
             'children': [
                 {
-                    'elem': ('tag', u'p', {}),
+                    'elem': ('tag', 'p', {}),
                     'children': [
                         {
-                            'elem': ('tag', u'a', {
-                                u'href': u'http://example.com?find=%5C*'
+                            'elem': ('tag', 'a', {
+                                'href': 'http://example.com?find=%5C*'
                             }),
                             'children': [
-                                ('text', u'http://example.com?find=\\*')
+                                ('text', 'http://example.com?find=\\*')
                             ]
                         }
                     ]
@@ -86,15 +86,15 @@ class TestNaiveHTMLParser(unittest.TestCase):
             'elem': 'body',
             'children': [
                 {
-                    'elem': ('tag', u'p', {}),
+                    'elem': ('tag', 'p', {}),
                     'children': [
                         {
-                            'elem': ('tag', u'a', {
-                                u'href': u'/f%C3%B6%C3%B6',
-                                u'title': u'f\xf6\xf6'
+                            'elem': ('tag', 'a', {
+                                'href': '/f%C3%B6%C3%B6',
+                                'title': u'föö'
                             }),
                             'children': [
-                                ('text', u'foo')
+                                ('text', 'foo')
                             ]
                         }
                     ]
@@ -104,19 +104,19 @@ class TestNaiveHTMLParser(unittest.TestCase):
         self.assertEqual(expect, self.parser.body)
 
     def test_common_424(self):
-        text = u'<p>foo <em>*</em></p>'
+        text = '<p>foo <em>*</em></p>'
         self.parser.parse(text)
         expect = {
             'elem': 'body',
             'children': [
                 {
-                    'elem': ('tag', u'p', {}),
+                    'elem': ('tag', 'p', {}),
                     'children': [
-                        ('text', u'foo '),
+                        ('text', 'foo '),
                         {
-                            'elem': ('tag', u'em', {}),
+                            'elem': ('tag', 'em', {}),
                             'children': [
-                                ('text', u'*')
+                                ('text', '*')
                             ]
                         }
                     ]
