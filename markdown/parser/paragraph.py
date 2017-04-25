@@ -22,8 +22,10 @@ class Paragraph(BlockElement):
         index += 1
         if line == '':
             if len(self._lines) == 0:
-                return False, start
+                # Consumes the empty line.
+                return False, index
             else:
+                # The paragraph is closed by an empty line.
                 self._finished = True
                 self._lines[-1] = self._lines[-1].rstrip()
                 return True, index

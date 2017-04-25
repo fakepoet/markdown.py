@@ -12,8 +12,6 @@ class TestParagraph(unittest.TestCase):
         index = 0
         while index < len(code):
             success, index = paragraph.parse(code, index)
-            if not success:
-                index += 1
             if paragraph.is_finished():
                 paragraphs.append(paragraph)
                 paragraph = Paragraph()

@@ -2,13 +2,19 @@
 """
 The markdown parser.
 """
+from .container import Container
+from .paragraph import Paragraph
 
 
 class Parser(object):
 
     def __init__(self):
+        self._block_parsers = [      # Block parsers.
+            Container,
+            Paragraph,
+        ]
         self._config = {             # The configuration of the parser.
-            'gfm': False             # Enable GitHub Flavored Markdown
+            'gfm': False             # Enable GitHub Flavored Markdown.
         }
         self._link_references = []   # The references to links.
         self._link_definitions = {}  # Link reference definitions.
@@ -40,4 +46,11 @@ class Parser(object):
         Returns:
             The parsed elements.
         """
+        index = 0
+        while index < len(code):
+            for block_parser_class in self._block_parsers:
+                block_parser = block_parser_class.__init__()
+                success, index = block_parser.parse(code, index)
+                if success:
+                    self._blocks.append(block_parser)
         return self._blocks
