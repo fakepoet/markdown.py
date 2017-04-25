@@ -6,6 +6,11 @@ The markdown parser.
 
 class Parser(object):
 
+    _config = []
+    _link_references = []
+    _link_definitions = {}
+    _blocks = []
+
     def __init__(self):
         self.reset()
 
@@ -14,8 +19,8 @@ class Parser(object):
         self._config = {
             'gfm': False    # Enable GitHub Flavored Markdown
         }
-        self._linkRefs = []  # Links
-        self._linkDefs = {}  # Link reference definitions
+        self._link_references = []   # Links
+        self._link_definitions = {}  # Link reference definitions
         self._blocks = []
 
     def config(self, key, value):
