@@ -16,6 +16,16 @@ class NaiveHTMLParser(object):
         pass
 
     def parse(self, content, parent=None):
+        """
+        Parse the HTML content.
+
+        Args:
+            content: The UTF-8 encoded string.
+            parent: The parent HTML element.
+
+        Returns:
+            The index of parsed content.
+        """
         if parent is None:
             self.body = {
                 'elem': 'body',
@@ -45,23 +55,23 @@ class NaiveHTMLParser(object):
             ))
             if parts[0][0] == '/':
                 return i + 1
-            attrs = {}
+            attributes = {}
             for part in parts[1:]:
                 if part != '/':
                     if '=' in part:
-                        strs = part.split('=')
-                        key = strs[0]
-                        val = '='.join(strs[1:])
+                        strings = part.split('=')
+                        key = strings[0]
+                        val = '='.join(strings[1:])
                         if len(val) >= 2 and val[0] == '"' and val[-1] == '"':
                             val = val[1:-1]
-                        attrs[key] = val
+                        attributes[key] = val
                     else:
-                        attrs[part] = None
+                        attributes[part] = None
             if parts[-1] == '/':
-                parent['children'].append(('tag', parts[0], attrs))
+                parent['children'].append(('tag', parts[0], attributes))
             else:
                 leaf = {
-                    'elem': ('tag', parts[0], attrs),
+                    'elem': ('tag', parts[0], attributes),
                     'children': [],
                 }
                 i += self.parse(content[i + 1:], leaf) + 1

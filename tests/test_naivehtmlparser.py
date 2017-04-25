@@ -3,7 +3,7 @@
 import os
 import codecs
 import unittest
-from naivehtmlparser import NaiveHTMLParser
+from .naivehtmlparser import NaiveHTMLParser
 
 
 class TestNaiveHTMLParser(unittest.TestCase):
