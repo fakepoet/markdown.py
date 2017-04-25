@@ -8,8 +8,10 @@ import codecs
 import requests
 
 try:
+    # Python 2
     from HTMLParser import HTMLParser
 except ImportError:
+    # Python 3
     from html.parser import HTMLParser
 
 SPEC_URL = 'http://spec.commonmark.org/0.27/'

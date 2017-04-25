@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 class NaiveHTMLParser(object):
     """
     A naive HTML parser for testing.
@@ -9,13 +10,15 @@ class NaiveHTMLParser(object):
         <tag />
     """
 
+    body = {}
+
     def __init__(self):
         pass
 
     def parse(self, content, parent=None):
         if parent is None:
             self.body = {
-                'elem': ('body'),
+                'elem': 'body',
                 'children': []
             }
             self.parse(content, self.body)

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 The abstract printer class.
 """
