@@ -7,11 +7,10 @@ from .element import BlockElement
 
 class Paragraph(BlockElement):
 
-    _lines = []
-
     def __init__(self):
         super(Paragraph, self).__init__()
-        self._lines = []
+        self._lines = []     # The lines of the paragraph.
+        self._tight = False  # Whether the paragraph is tight in a list item.
 
     def parse(self, code, index, auxiliary=None):
         if self._finished:
@@ -33,3 +32,9 @@ class Paragraph(BlockElement):
 
     def get_inlines(self):
         return ['\n'.join(self._lines)]
+
+    def set_tight(self, tight):
+        self._tight = tight
+
+    def is_tight(self):
+        return self._tight

@@ -6,11 +6,9 @@ The abstract element.
 
 class Element(object):
 
-    _line = -1    # The start line number.
-    _column = -1  # The start column number.
-
     def __init__(self):
-        pass
+        self._line = -1    # The start line number.
+        self._column = -1  # The start column number.
 
     def parse(self, code, index, auxiliary=None):
         """
@@ -32,10 +30,9 @@ class Element(object):
 
 class BlockElement(Element):
 
-    _finished = False  # Whether the element is closed.
-
     def __init__(self):
         super(BlockElement, self).__init__()
+        self._finished = False  # Whether the element is closed.
 
     def is_finished(self):
         return self._finished
