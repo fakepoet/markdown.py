@@ -7,8 +7,8 @@ from .element import BlockElement
 
 class Paragraph(BlockElement):
 
-    def __init__(self):
-        super(Paragraph, self).__init__()
+    def __init__(self, config):
+        super(Paragraph, self).__init__(config)
         self._lines = []     # The lines of the paragraph.
         self._tight = False  # Whether the paragraph is tight in a list item.
         self._level = 0      # 0 if it is not a setext heading, otherwise it could be 1 or 2.

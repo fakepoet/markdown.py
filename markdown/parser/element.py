@@ -6,8 +6,8 @@ The abstract element.
 
 class Element(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, config):
+        self._config = config
 
     def parse(self, code, index, auxiliary=None):
         """
@@ -29,8 +29,8 @@ class Element(object):
 
 class BlockElement(Element):
 
-    def __init__(self):
-        super(BlockElement, self).__init__()
+    def __init__(self, config):
+        super(BlockElement, self).__init__(config)
         self._closed = False  # Whether the element is closed.
 
     def close(self):
@@ -58,5 +58,5 @@ class BlockElement(Element):
 
 class InlineElement(Element):
 
-    def __init__(self):
-        super(InlineElement, self).__init__()
+    def __init__(self, config):
+        super(InlineElement, self).__init__(config)

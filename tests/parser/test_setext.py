@@ -1,13 +1,13 @@
 #!/usr/env/bin python
 import unittest
-from .test_paragraph import TestParagraph
+from markdown import Parser
 
 
 class TestSetext(unittest.TestCase):
 
     def test_common__0_27__52(self):
         code = 'Foo\n-------------------------\n\nFoo\n='
-        paragraphs = TestParagraph.parse_paragraphs(code)
+        paragraphs = Parser.parse(code)
         self.assertEquals(2, len(paragraphs))
         self.assertEquals(['Foo'], paragraphs[0].get_inlines())
         self.assertTrue(paragraphs[0].is_setext())
@@ -18,7 +18,7 @@ class TestSetext(unittest.TestCase):
 
     def test_common__0_27__53(self):
         code = '   Foo\n---\n\n  Foo\n-----\n\n  Foo\n  ==='
-        paragraphs = TestParagraph.parse_paragraphs(code)
+        paragraphs = Parser.parse(code)
         self.assertEquals(3, len(paragraphs))
         self.assertEquals(['Foo'], paragraphs[0].get_inlines())
         self.assertTrue(paragraphs[0].is_setext())
@@ -32,7 +32,7 @@ class TestSetext(unittest.TestCase):
 
     def test_common__0_27__55(self):
         code = 'Foo\n   ----      '
-        paragraphs = TestParagraph.parse_paragraphs(code)
+        paragraphs = Parser.parse(code)
         self.assertEquals(1, len(paragraphs))
         self.assertEquals(['Foo'], paragraphs[0].get_inlines())
         self.assertTrue(paragraphs[0].is_setext())
@@ -40,14 +40,14 @@ class TestSetext(unittest.TestCase):
 
     def test_common__0_27__56(self):
         code = 'Foo\n    ----      '
-        paragraphs = TestParagraph.parse_paragraphs(code)
+        paragraphs = Parser.parse(code)
         self.assertEquals(1, len(paragraphs))
         self.assertEquals(['Foo\n----'], paragraphs[0].get_inlines())
         self.assertFalse(paragraphs[0].is_setext())
 
     def test_common__0_27__57_a(self):
         code = 'Foo\n= ='
-        paragraphs = TestParagraph.parse_paragraphs(code)
+        paragraphs = Parser.parse(code)
         self.assertEquals(1, len(paragraphs))
         self.assertEquals(['Foo\n= ='], paragraphs[0].get_inlines())
         self.assertFalse(paragraphs[0].is_setext())
