@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='markdown.py',
     version='0.0.1',
-    author='fakepoet',
+    author='fakepoet/CyberZHG',
     author_email='fakepoet0101@gmail.com',
     packages=['markdown'],
     scripts=[],
