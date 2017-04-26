@@ -7,7 +7,7 @@ setup(
     author_email='fakepoet0101@gmail.com',
     packages=['markdown'],
     scripts=[],
-    url='https://github.com/fakepoet/tiezhu',
+    url='https://github.com/fakepoet/markdown.py',
     license='LICENSE',
     description='',
     long_description=open('README.md').read()
