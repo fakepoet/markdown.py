@@ -2,10 +2,10 @@
 """
 The bullet list element.
 """
-from .element import BlockElement
+from .list import List
 
 
-class BulletList(BlockElement):
+class BulletList(List):
 
     def __init__(self):
         super(BulletList, self).__init__()

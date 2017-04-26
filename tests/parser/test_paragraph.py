@@ -12,11 +12,13 @@ class TestParagraph(unittest.TestCase):
         index = 0
         while index < len(code):
             success, index = paragraph.parse(code, index)
-            if paragraph.is_finished():
+            if paragraph.is_closed():
                 paragraphs.append(paragraph)
                 paragraph = Paragraph()
         if success:
             paragraphs.append(paragraph)
+        if len(paragraphs) > 0:
+            paragraphs[-1].close()
         return paragraphs
 
     def test_common__0_27__180(self):

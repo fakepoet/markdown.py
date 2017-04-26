@@ -2,10 +2,10 @@
 """
 The block quote element.
 """
-from .element import BlockElement
+from .container import Container
 
 
-class BlockQuote(BlockElement):
+class BlockQuote(Container):
 
     def __init__(self):
         super(BlockQuote, self).__init__()

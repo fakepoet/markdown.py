@@ -2,10 +2,10 @@
 """
 The ordered list element.
 """
-from .element import BlockElement
+from .list import List
 
 
-class OrderedList(BlockElement):
+class OrderedList(List):
 
     def __init__(self):
         super(OrderedList, self).__init__()
