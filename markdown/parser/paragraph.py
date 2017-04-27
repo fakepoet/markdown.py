@@ -44,7 +44,7 @@ class Paragraph(BlockElement):
         super(Paragraph, self).close()
         self._lines[-1] = self._lines[-1].rstrip()
         if len(self._lines) == 2:
-            if len(self._last) - len(self._last.lstrip()) < 4:
+            if self.get_heading_space_num(self._last) < 4:
                 line = self._lines[-1]
                 # Empty lines could not exist in paragraph.
                 if line[0] in ['=', '-'] and all(c == line[0] for c in line):

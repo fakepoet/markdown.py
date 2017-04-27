@@ -26,6 +26,18 @@ class Element(object):
         """
         pass
 
+    @staticmethod
+    def get_heading_space_num(line, index=0):
+        num = 0
+        for c in line[index:]:
+            if c == ' ':
+                num += 1
+            elif c == '\t':
+                num += 4
+            else:
+                break
+        return num
+
 
 class BlockElement(Element):
 
