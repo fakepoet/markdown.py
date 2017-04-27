@@ -11,6 +11,13 @@ class Container(BlockElement):
     def __init__(self, config):
         super(Container, self).__init__(config)
         self._blocks = []  # The parsed block elements.
+        self._interrupt_parsers = [
+            # ThematicBreak
+            # AtxHeadings
+            # FencedCodeBlock
+            # HtmlBlock  # Type 1-6
+            # List       # Not empty
+        ]
         self._container_parsers = [
             # BlockQuote,
             # BulletList,
@@ -25,9 +32,18 @@ class Container(BlockElement):
         while index < len(code):
             # Continuation
             if len(self._blocks) > 0 and not self._blocks[-1].is_closed():
-                success, index = self._blocks[-1].parse(code, index)
-                if not self._blocks[-1].is_closed():
-                    continue
+                if isinstance(self._blocks[-1], Paragraph):
+                    has_interrupted = False
+                    for interrupt_parser in self._interrupt_parsers:
+                        success, index = interrupt_parser.parse(code, index)
+                        if success:
+                            has_interrupted = True
+                            self._blocks.append(block_parser)
+                            break
+                if not has_interrupted:
+                    success, index = self._blocks[-1].parse(code, index)
+                    if not self._blocks[-1].is_closed():
+                        continue
             # Try container parsers
             # Try block parsers
             for block_parser_class in self._block_parsers:

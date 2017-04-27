@@ -21,6 +21,8 @@ class Parser(object):
         """
         if config is None:
             config = {}
+        config['link_references'] = {}
+        config['links'] = []
         container_parser = Container(config)
         container_parser.parse(code, 0)
         return container_parser.get_blocks()
