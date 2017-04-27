@@ -23,12 +23,11 @@ class Container(BlockElement):
     def parse(self, code, index, auxiliary=None):
         index = 0
         while index < len(code):
-            #  Paragraph continuation
-            if len(self._blocks) > 0 and self._blocks[-1].__class__.__name__ == 'Paragraph':
+            # Continuation
+            if len(self._blocks) > 0 and not self._blocks[-1].is_closed():
+                success, index = self._blocks[-1].parse(code, index)
                 if not self._blocks[-1].is_closed():
-                    success, index = self._blocks[-1].parse(code, index)
-                    if success:
-                        continue
+                    continue
             # Try container parsers
             # Try block parsers
             for block_parser_class in self._block_parsers:
