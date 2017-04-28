@@ -4,6 +4,7 @@ Container (block quotes and lists) parser.
 """
 from .element import BlockElement
 from .paragraph import Paragraph
+from .thematic_break import ThematicBreak
 
 
 class Container(BlockElement):
@@ -12,11 +13,11 @@ class Container(BlockElement):
         super(Container, self).__init__(config)
         self._blocks = []  # The parsed block elements.
         self._interrupt_parsers = [
-            # ThematicBreak
-            # AtxHeadings
-            # FencedCodeBlock
-            # HtmlBlock  # Type 1-6
-            # List       # Not empty
+            ThematicBreak,
+            # AtxHeadings,
+            # FencedCodeBlock,
+            # HtmlBlock  # Type 1-6,
+            # List       # Not empty,
         ]
         self._container_parsers = [
             # BlockQuote,
@@ -24,7 +25,8 @@ class Container(BlockElement):
             # OrderedList,
         ]
         self._block_parsers = [
-            Paragraph
+            ThematicBreak,
+            Paragraph,
         ]
 
     def parse(self, code, index, auxiliary=None):
@@ -34,11 +36,15 @@ class Container(BlockElement):
             if len(self._blocks) > 0 and not self._blocks[-1].is_closed():
                 if isinstance(self._blocks[-1], Paragraph):
                     has_interrupted = False
-                    for interrupt_parser in self._interrupt_parsers:
-                        success, index = interrupt_parser.parse(code, index)
+                    for interrupt_parser_class in self._interrupt_parsers:
+                        interrupt_parser = interrupt_parser_class(self._config)
+                        success, index = interrupt_parser.parse(code, index, {
+                            self.AUX_INTERRUPT: True
+                        })
                         if success:
                             has_interrupted = True
-                            self._blocks.append(block_parser)
+                            self._blocks[-1].close()
+                            self._blocks.append(interrupt_parser)
                             break
                 if not has_interrupted:
                     success, index = self._blocks[-1].parse(code, index)

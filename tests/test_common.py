@@ -25,6 +25,9 @@ class TestCommon(unittest.TestCase):
 
     def test_commons(self):
         intervals = [
+            (13, 17),
+            (19, 25),
+            (28, 29),
             (52, 53),
             (55, 56),
             (180, 184),

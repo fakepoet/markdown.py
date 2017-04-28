@@ -12,16 +12,19 @@ class Paragraph(BlockElement):
         self._lines = []     # The lines of the paragraph.
         self._tight = False  # Whether the paragraph is tight in a list item.
         self._level = 0      # 0 if it is not a setext heading, otherwise it could be 1 or 2.
-        self._last = ''      # Last line with heading and tailing spaces.
 
     def parse(self, code, index, auxiliary=None):
         if self._closed:
             return False, index
         start = index
+        if len(self._lines) == 0:
+            success, index = self.check_indent(code, index)
+            if not success:
+                return False, start
         while index < len(code) and code[index] != '\n':
             index += 1
-        self._last = code[start:index]
-        line = self._last.lstrip()
+        last = code[start:index]
+        line = last.lstrip()
         index += 1
         if line == '':
             if len(self._lines) == 0:
@@ -32,6 +35,17 @@ class Paragraph(BlockElement):
                 self.close()
                 return True, index
         self._lines.append(line)
+        if len(self._lines) == 2:
+            if self.get_heading_space_num(last) < 4:
+                line = self._lines[-1].rstrip()
+                # Empty lines could not exist in paragraph.
+                if line[0] in ['=', '-'] and all(c == line[0] for c in line):
+                    self.close()
+                    if line[0] == '=':
+                        self._level = 1
+                    else:
+                        self._level = 2
+                    del self._lines[-1]
         return True, index
 
     def close(self):
@@ -43,16 +57,6 @@ class Paragraph(BlockElement):
         """
         super(Paragraph, self).close()
         self._lines[-1] = self._lines[-1].rstrip()
-        if len(self._lines) == 2:
-            if self.get_heading_space_num(self._last) < 4:
-                line = self._lines[-1]
-                # Empty lines could not exist in paragraph.
-                if line[0] in ['=', '-'] and all(c == line[0] for c in line):
-                    if line[0] == '=':
-                        self._level = 1
-                    else:
-                        self._level = 2
-                    del self._lines[-1]
 
     def get_inlines(self):
         return ['\n'.join(self._lines)]

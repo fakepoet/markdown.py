@@ -41,6 +41,8 @@ class Element(object):
 
 class BlockElement(Element):
 
+    AUX_INTERRUPT = 'interrupt'
+
     def __init__(self, config):
         super(BlockElement, self).__init__(config)
         self._closed = False  # Whether the element is closed.
@@ -66,6 +68,25 @@ class BlockElement(Element):
             An array.
         """
         return []
+
+    @staticmethod
+    def check_indent(code, index):
+        """
+        Check whether the number of heading spaces is less than 4.
+
+        Args:
+            code: An UTF-8 string.
+            index: The start index (inclusive) of the current parsing.
+
+        Returns:
+            A tuple (success, index) indicating:
+                success: true is the parsing succeed.
+                index: the end index (exclusive) of the parsing.
+        """
+        space_num = Element.get_heading_space_num(code, index)
+        if space_num >= 4:
+            return False, index
+        return True, index + space_num
 
 
 class InlineElement(Element):

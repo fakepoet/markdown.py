@@ -10,8 +10,16 @@ class CommonHTMLPrinter(Printer):
 
     def __str__(self):
         html = u''
+        maps = {}
         for block in self._blocks:
-            name = 'print_' + block.__class__.__name__.lower()
+            name = block.__class__.__name__
+            if name not in maps:
+                def mapping(ch):
+                    if 'A' <= ch <= 'Z':
+                        return '_' + chr(ord(ch) - ord('A') + ord('a'))
+                    return ch
+                maps[name] = ''.join(map(mapping, name))[1:]
+            name = 'print_' + maps[name]
             html += getattr(CommonHTMLPrinter, name)(block)
         return html
 
@@ -25,3 +33,7 @@ class CommonHTMLPrinter(Printer):
         if paragraph.is_tight():
             return text + '\n'
         return '<p>' + text + '</p>\n'
+
+    @staticmethod
+    def print_thematic_break(_):
+        return '<hr />\n'

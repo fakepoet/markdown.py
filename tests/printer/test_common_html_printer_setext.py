@@ -4,7 +4,7 @@ from markdown import Parser
 from markdown import CommonHTMLPrinter
 
 
-class TestSetext(unittest.TestCase):
+class TestCommonHTMLPrinterSetext(unittest.TestCase):
 
     def test_common__0_27__52(self):
         code = 'Foo\n-------------------------\n\nFoo\n='
