@@ -15,6 +15,6 @@ install:
   - pip install pep8
   - pip install coverage
 before_script: pep8 --max-line-length=100 .
-script: nosetests --with-coverage tests
+script: nosetests --cover-package markdown --with-coverage tests
 after_success:
   coveralls
