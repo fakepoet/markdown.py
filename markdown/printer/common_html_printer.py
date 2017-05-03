@@ -37,3 +37,9 @@ class CommonHTMLPrinter(Printer):
     @staticmethod
     def print_thematic_break(_):
         return '<hr />\n'
+
+    @staticmethod
+    def print_atx_heading(atx_heading):
+        level = atx_heading.get_level()
+        text = atx_heading.get_inlines()[0]
+        return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'

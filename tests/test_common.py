@@ -21,13 +21,23 @@ class TestCommon(unittest.TestCase):
             standard_output = reader.read()
         parsed = Parser.parse(standard_input)
         html = str(CommonHTMLPrinter(parsed))
-        self.assertEqual(standard_output, html, 'Common: ' + str(index))
+        message = 'Common: ' + str(index) + '\n'
+        message += '=' * 80 + '\n'
+        message += standard_output
+        message += '-' * 80 + '\n'
+        message += html
+        message += '=' * 80 + '\n'
+        self.assertEqual(standard_output, html, message)
 
     def test_commons(self):
         intervals = [
             (13, 17),
             (19, 25),
             (28, 29),
+            (32, 34),
+            (37, 38),
+            (40, 45),
+            (47, 49),
             (52, 53),
             (55, 56),
             (180, 184),

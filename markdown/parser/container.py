@@ -5,6 +5,7 @@ Container (block quotes and lists) parser.
 from .element import BlockElement
 from .paragraph import Paragraph
 from .thematic_break import ThematicBreak
+from .atx_heading import AtxHeading
 
 
 class Container(BlockElement):
@@ -14,7 +15,7 @@ class Container(BlockElement):
         self._blocks = []  # The parsed block elements.
         self._interrupt_parsers = [
             ThematicBreak,
-            # AtxHeadings,
+            AtxHeading,
             # FencedCodeBlock,
             # HtmlBlock  # Type 1-6,
             # List       # Not empty,
@@ -26,6 +27,7 @@ class Container(BlockElement):
         ]
         self._block_parsers = [
             ThematicBreak,
+            AtxHeading,
             Paragraph,
         ]
 
@@ -46,10 +48,10 @@ class Container(BlockElement):
                             self._blocks[-1].close()
                             self._blocks.append(interrupt_parser)
                             break
-                if not has_interrupted:
-                    success, index = self._blocks[-1].parse(code, index)
-                    if not self._blocks[-1].is_closed():
-                        continue
+                    if not has_interrupted:
+                        success, index = self._blocks[-1].parse(code, index)
+                        if not self._blocks[-1].is_closed():
+                            continue
             # Try container parsers
             # Try block parsers
             for block_parser_class in self._block_parsers:
