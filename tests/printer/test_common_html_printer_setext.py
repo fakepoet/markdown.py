@@ -35,3 +35,9 @@ class TestCommonHTMLPrinterSetext(unittest.TestCase):
         paragraphs = Parser.parse(code)
         html = str(CommonHTMLPrinter(paragraphs))
         self.assertEqual('<p>Foo\n= =</p>\n', html)
+
+    def test_multi_line(self):
+        code = 'a\nb\n==='
+        paragraphs = Parser.parse(code)
+        html = str(CommonHTMLPrinter(paragraphs))
+        self.assertEqual('<h1>a b</h1>\n', html)

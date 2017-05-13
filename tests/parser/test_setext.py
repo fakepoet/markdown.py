@@ -51,3 +51,10 @@ class TestSetext(unittest.TestCase):
         self.assertEqual(1, len(paragraphs))
         self.assertEqual(['Foo\n= ='], paragraphs[0].get_inlines())
         self.assertFalse(paragraphs[0].is_setext())
+
+    def test_multi_line(self):
+        code = 'a\nb\n==='
+        paragraphs = Parser.parse(code)
+        self.assertEqual(1, len(paragraphs))
+        self.assertTrue(paragraphs[0].is_setext())
+        self.assertEqual(['a\nb'], paragraphs[0].get_inlines())
