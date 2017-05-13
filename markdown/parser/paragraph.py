@@ -35,7 +35,7 @@ class Paragraph(BlockElement):
                 self.close()
                 return True, index
         self._lines.append(line)
-        if len(self._lines) == 2:
+        if len(self._lines) >= 2:
             if self.get_heading_space_num(last) < 4:
                 line = self._lines[-1].rstrip()
                 # Empty lines could not exist in paragraph.
