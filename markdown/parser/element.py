@@ -2,12 +2,14 @@
 """
 The abstract element.
 """
+from .parse_util import ParseUtil
 
 
 class Element(object):
 
     def __init__(self, config):
         self._config = config
+        self._line_num = 0
 
     def parse(self, code, index, auxiliary=None):
         """
@@ -26,17 +28,11 @@ class Element(object):
         """
         pass
 
-    @staticmethod
-    def get_heading_space_num(line, index=0):
-        num = 0
-        for c in line[index:]:
-            if c == ' ':
-                num += 1
-            elif c == '\t':
-                num += 4
-            else:
-                break
-        return num
+    def set_line_num(self, line_num):
+        self._line_num = line_num
+
+    def line_num(self):
+        return self._line_num
 
 
 class BlockElement(Element):
@@ -83,7 +79,7 @@ class BlockElement(Element):
                 success: true is the parsing succeed.
                 index: the end index (exclusive) of the parsing.
         """
-        space_num = Element.get_heading_space_num(code, index)
+        space_num = ParseUtil.get_heading_space_num(code, index)
         if space_num >= 4:
             return False, index
         return True, index + space_num

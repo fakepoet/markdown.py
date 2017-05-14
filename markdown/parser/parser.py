@@ -21,6 +21,7 @@ class Parser(object):
         """
         if config is None:
             config = {}
+        code = code.replace('\r\n', '\n').replace('\r', '\n')
         if len(code) > 0 and code[-1] != '\n':
             code += '\n'
         config['link_references'] = {}

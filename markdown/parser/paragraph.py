@@ -2,6 +2,7 @@
 """
 The paragraph element.
 """
+from .parse_util import ParseUtil
 from .element import BlockElement
 
 
@@ -36,7 +37,7 @@ class Paragraph(BlockElement):
                 return True, index
         self._lines.append(line)
         if len(self._lines) >= 2:
-            if self.get_heading_space_num(last) < 4:
+            if ParseUtil.get_heading_space_num(last) < 4:
                 line = self._lines[-1].rstrip()
                 # Empty lines could not exist in paragraph.
                 if line[0] in ['=', '-'] and all(c == line[0] for c in line):
