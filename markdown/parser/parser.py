@@ -21,6 +21,8 @@ class Parser(object):
         """
         if config is None:
             config = {}
+        if len(code) > 0 and code[-1] != '\n':
+            code += '\n'
         config['link_references'] = {}
         config['links'] = []
         container_parser = Container(config)
