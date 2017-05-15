@@ -7,7 +7,6 @@ from markdown.parser.leaves import AtxHeadingParser
 from markdown.parser.leaves import ParagraphElement
 from markdown.parser.leaves import ParagraphParser
 from markdown.parser.leaves import ThematicBreakParser
-from markdown.parser.base import BlockElementParser
 
 
 class ContainerParser(BlockElementParser):
@@ -17,7 +16,7 @@ class ContainerParser(BlockElementParser):
         self._blocks = []  # The parsed block elements.
         self._paragraph_parser = ParagraphParser(config)
         self._interrupt_parsers = [
-            # ThematicBreakParser(config),
+            ThematicBreakParser(config),
             # AtxHeadingParser(config),
             # FencedCodeBlockParser(config),
             # HtmlBlockParser(config)  # Type 1-6,
@@ -29,7 +28,7 @@ class ContainerParser(BlockElementParser):
             # OrderedListParser(config),
         ]
         self._block_parsers = [
-            # ThematicBreakParser(config),
+            ThematicBreakParser(config),
             # AtxHeadingParser(config),
             self._paragraph_parser,
         ]
@@ -41,8 +40,7 @@ class ContainerParser(BlockElementParser):
             if len(self._blocks) > 0 and not self._blocks[-1].is_closed():
                 if isinstance(self._blocks[-1], ParagraphElement):
                     has_interrupted = False
-                    for interrupt_parser_class in self._interrupt_parsers:
-                        interrupt_parser = interrupt_parser_class(self._config)
+                    for interrupt_parser in self._interrupt_parsers:
                         success, index = interrupt_parser.parse(code, index, {
                             self.AUX_INTERRUPT: True
                         })
