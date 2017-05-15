@@ -44,6 +44,6 @@ class ParagraphParser(BlockElementParser):
                     if line[0] == '=':
                         elem.set_level(1)
                     else:
-                        elem.set_level(1)
+                        elem.set_level(2)
                     elem.del_last_line()
         return elem, index
