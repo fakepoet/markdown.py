@@ -2,7 +2,7 @@
 """
 The markdown parser.
 """
-from markdown.parser.containers.container import Container
+from markdown.parser.containers.container_parser import ContainerParser
 
 
 class Parser(object):
@@ -30,6 +30,6 @@ class Parser(object):
             code += '\n'
         config['link_references'] = {}
         config['links'] = []
-        container_parser = Container(config)
+        container_parser = ContainerParser(config)
         container_parser.parse(code, 0)
         return container_parser.get_blocks()
