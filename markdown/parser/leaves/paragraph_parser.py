@@ -4,6 +4,7 @@ The paragraph element.
 """
 from markdown.parser.base import BlockElementParser
 from markdown.parser.util import ParseUtil
+from markdown.parser.leaves.paragraph_element import ParagraphElement
 
 
 class ParagraphParser(BlockElementParser):
@@ -12,61 +13,37 @@ class ParagraphParser(BlockElementParser):
         super(ParagraphParser, self).__init__(config)
 
     def parse(self, code, index, auxiliary=None):
-        if self._closed:
-            return False, index
+        elem = self.get_unclosed(auxiliary)
         start = index
-        if len(self._lines) == 0:
+        if elem is None:
             success, index = self.check_indent(code, index)
             if not success:
-                return False, start
+                return None, start
         while index < len(code) and code[index] != '\n':
             index += 1
         last = code[start:index]
         line = last.lstrip()
         index += 1
         if line == '':
-            if len(self._lines) == 0:
+            if elem is None:
                 # Consumes the empty line.
-                return False, index
+                return None, index
             else:
                 # The paragraph is closed by an empty line.
-                self.close()
-                return True, index
-        self._lines.append(line)
-        if len(self._lines) >= 2:
+                elem.close()
+                return elem, index
+        if elem is None:
+            elem = ParagraphElement()
+        elem.append(line)
+        if len(elem.get_lines()) >= 2:
             if ParseUtil.get_heading_space_num(last) < 4:
-                line = self._lines[-1].rstrip()
+                line = line.rstrip()
                 # Empty lines could not exist in paragraph.
                 if line[0] in ['=', '-'] and all(c == line[0] for c in line):
-                    self.close()
+                    elem.close()
                     if line[0] == '=':
-                        self._level = 1
+                        elem.set_level(1)
                     else:
-                        self._level = 2
-                    del self._lines[-1]
-        return True, index
-
-    def close(self):
-        """
-        Check whether this is a setext heading.
-
-        Returns:
-            void
-        """
-        super(Paragraph, self).close()
-        self._lines[-1] = self._lines[-1].rstrip()
-
-    def get_inlines(self):
-        return ['\n'.join(self._lines)]
-
-    def set_tight(self, tight):
-        self._tight = tight
-
-    def is_tight(self):
-        return self._tight
-
-    def is_setext(self):
-        return self._level != 0
-
-    def get_level(self):
-        return self._level
+                        elem.set_level(1)
+                    elem.del_last_line()
+        return elem, index
