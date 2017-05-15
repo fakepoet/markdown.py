@@ -2,33 +2,33 @@
 """
 Container (block quotes and lists) parser.
 """
-from markdown.parser.leaves import AtxHeading
-from markdown.parser.leaves import Paragraph
-from markdown.parser.leaves import ThematicBreak
-from markdown.parser.util import BlockElement
+from markdown.parser.leaves import AtxHeadingParser
+from markdown.parser.leaves import ParagraphParser
+from markdown.parser.leaves import ThematicBreakParser
+from markdown.parser.base import BlockElementParser
 
 
-class Container(BlockElement):
+class ContainerParser(BlockElementParser):
 
     def __init__(self, config):
-        super(Container, self).__init__(config)
+        super(ContainerParser, self).__init__(config)
         self._blocks = []  # The parsed block elements.
         self._interrupt_parsers = [
-            ThematicBreak,
-            AtxHeading,
-            # FencedCodeBlock,
-            # HtmlBlock  # Type 1-6,
-            # List       # Not empty,
+            ThematicBreakParser,
+            AtxHeadingParser,
+            # FencedCodeBlockParser,
+            # HtmlBlockParser  # Type 1-6,
+            # ListParser       # Not empty,
         ]
         self._container_parsers = [
-            # BlockQuote,
-            # BulletList,
-            # OrderedList,
+            # BlockQuoteParser,
+            # BulletListParser,
+            # OrderedListParser,
         ]
         self._block_parsers = [
-            ThematicBreak,
-            AtxHeading,
-            Paragraph,
+            ThematicBreakParser,
+            AtxHeadingParser,
+            ParagraphParser,
         ]
 
     def parse(self, code, index, auxiliary=None):
@@ -36,7 +36,7 @@ class Container(BlockElement):
         while index < len(code):
             # Continuation
             if len(self._blocks) > 0 and not self._blocks[-1].is_closed():
-                if isinstance(self._blocks[-1], Paragraph):
+                if isinstance(self._blocks[-1], ParagraphParser):
                     has_interrupted = False
                     for interrupt_parser_class in self._interrupt_parsers:
                         interrupt_parser = interrupt_parser_class(self._config)

@@ -2,13 +2,13 @@
 """
 The ATX heading element.
 """
-from markdown.parser.util import BlockElement
+from markdown.parser.base import BlockElementParser
 
 
-class AtxHeading(BlockElement):
+class AtxHeadingParser(BlockElementParser):
 
     def __init__(self, config):
-        super(AtxHeading, self).__init__(config)
+        super(AtxHeadingParser, self).__init__(config)
         self._level = 0
         self._title = ''
 

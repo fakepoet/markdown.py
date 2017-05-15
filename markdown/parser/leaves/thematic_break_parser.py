@@ -2,13 +2,13 @@
 """
 The thematic break element.
 """
-from markdown.parser.util import BlockElement
+from markdown.parser.base import BlockElementParser
 
 
-class ThematicBreak(BlockElement):
+class ThematicBreakParser(BlockElementParser):
 
     def __init__(self, config):
-        super(ThematicBreak, self).__init__(config)
+        super(ThematicBreakParser, self).__init__(config)
         self.close()
 
     def parse(self, code, index, auxiliary=None):

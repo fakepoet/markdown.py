@@ -2,13 +2,13 @@
 """
 The ordered list element.
 """
-from markdown.parser.containers.list import List
+from markdown.parser.containers.list_parser import ListParser
 
 
-class OrderedList(List):
+class OrderedListParser(ListParser):
 
     def __init__(self, config):
-        super(OrderedList, self).__init__(config)
+        super(OrderedListParser, self).__init__(config)
 
     def parse(self, code, index, auxiliary=None):
         pass

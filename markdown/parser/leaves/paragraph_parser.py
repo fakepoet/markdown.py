@@ -2,17 +2,14 @@
 """
 The paragraph element.
 """
-from markdown.parser.util import BlockElement
+from markdown.parser.base import BlockElementParser
 from markdown.parser.util import ParseUtil
 
 
-class Paragraph(BlockElement):
+class ParagraphParser(BlockElementParser):
 
     def __init__(self, config):
-        super(Paragraph, self).__init__(config)
-        self._lines = []     # The lines of the paragraph.
-        self._tight = False  # Whether the paragraph is tight in a list item.
-        self._level = 0      # 0 if it is not a setext heading, otherwise it could be 1 or 2.
+        super(ParagraphParser, self).__init__(config)
 
     def parse(self, code, index, auxiliary=None):
         if self._closed:

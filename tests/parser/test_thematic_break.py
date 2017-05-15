@@ -2,8 +2,8 @@
 import unittest
 
 from markdown import Parser
-from markdown.parser.leaves.paragraph import Paragraph
-from markdown.parser.leaves.thematic_break import ThematicBreak
+from markdown.parser.leaves.paragraph_parser import Paragraph
+from markdown.parser.leaves.thematic_break_parser import ThematicBreak
 
 
 class TestThematicBreak(unittest.TestCase):
