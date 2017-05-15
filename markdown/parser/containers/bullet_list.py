@@ -2,7 +2,7 @@
 """
 The bullet list element.
 """
-from .list import List
+from markdown.parser.containers.list import List
 
 
 class BulletList(List):

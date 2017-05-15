@@ -2,7 +2,7 @@
 """
 The block quote element.
 """
-from .container import Container
+from markdown.parser.containers.container import Container
 
 
 class BlockQuote(Container):

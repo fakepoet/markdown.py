@@ -2,7 +2,7 @@
 """
 The markdown parser.
 """
-from .container import Container
+from markdown.parser.containers.container import Container
 
 
 class Parser(object):

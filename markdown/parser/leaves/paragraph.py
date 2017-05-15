@@ -2,8 +2,8 @@
 """
 The paragraph element.
 """
-from .parse_util import ParseUtil
-from .element import BlockElement
+from markdown.parser.util import BlockElement
+from markdown.parser.util import ParseUtil
 
 
 class Paragraph(BlockElement):

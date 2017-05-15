@@ -2,7 +2,7 @@
 """
 The abstract element.
 """
-from .parse_util import ParseUtil
+from markdown.parser.util.parse_util import ParseUtil
 
 
 class Element(object):

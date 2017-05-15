@@ -2,10 +2,10 @@
 """
 Container (block quotes and lists) parser.
 """
-from .element import BlockElement
-from .paragraph import Paragraph
-from .thematic_break import ThematicBreak
-from .atx_heading import AtxHeading
+from markdown.parser.leaves import AtxHeading
+from markdown.parser.leaves import Paragraph
+from markdown.parser.leaves import ThematicBreak
+from markdown.parser.util import BlockElement
 
 
 class Container(BlockElement):

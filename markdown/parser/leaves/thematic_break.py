@@ -2,7 +2,7 @@
 """
 The thematic break element.
 """
-from .element import BlockElement
+from markdown.parser.util import BlockElement
 
 
 class ThematicBreak(BlockElement):

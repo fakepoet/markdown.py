@@ -2,7 +2,7 @@
 """
 The ATX heading element.
 """
-from .element import BlockElement
+from markdown.parser.util import BlockElement
 
 
 class AtxHeading(BlockElement):

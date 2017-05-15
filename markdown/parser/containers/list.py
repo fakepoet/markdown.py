@@ -2,7 +2,7 @@
 """
 The list elements.
 """
-from .container import Container
+from markdown.parser.containers.container import Container
 
 
 class List(Container):

@@ -1,8 +1,9 @@
 #!/usr/env/bin python
 import unittest
+
 from markdown import Parser
-from markdown.parser.paragraph import Paragraph
-from markdown.parser.thematic_break import ThematicBreak
+from markdown.parser.leaves.paragraph import Paragraph
+from markdown.parser.leaves.thematic_break import ThematicBreak
 
 
 class TestThematicBreak(unittest.TestCase):
