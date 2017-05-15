@@ -51,9 +51,3 @@ class AtxHeadingParser(BlockElementParser):
         elem.set_level(level)
         elem.set_title(title)
         return elem, index + 1
-
-    def get_level(self):
-        return self._level
-
-    def get_inlines(self):
-        return [self._title]
