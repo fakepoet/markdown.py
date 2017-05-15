@@ -17,7 +17,7 @@ class ContainerParser(BlockElementParser):
         self._paragraph_parser = ParagraphParser(config)
         self._interrupt_parsers = [
             ThematicBreakParser(config),
-            # AtxHeadingParser(config),
+            AtxHeadingParser(config),
             # FencedCodeBlockParser(config),
             # HtmlBlockParser(config)  # Type 1-6,
             # ListParser(config)       # Not empty,
@@ -29,7 +29,7 @@ class ContainerParser(BlockElementParser):
         ]
         self._block_parsers = [
             ThematicBreakParser(config),
-            # AtxHeadingParser(config),
+            AtxHeadingParser(config),
             self._paragraph_parser,
         ]
 
@@ -41,16 +41,16 @@ class ContainerParser(BlockElementParser):
                 if isinstance(self._blocks[-1], ParagraphElement):
                     has_interrupted = False
                     for interrupt_parser in self._interrupt_parsers:
-                        success, index = interrupt_parser.parse(code, index, {
+                        elem, index = interrupt_parser.parse(code, index, {
                             self.AUX_INTERRUPT: True
                         })
-                        if success:
+                        if elem is not None:
                             has_interrupted = True
                             self._blocks[-1].close()
-                            self._blocks.append(interrupt_parser)
+                            self._blocks.append(elem)
                             break
                     if not has_interrupted:
-                        success, index = self._paragraph_parser.parse(code, index, {
+                        elem, index = self._paragraph_parser.parse(code, index, {
                             BlockElementParser.AUX_UNCLOSED: self._blocks[-1]
                         })
                         if not self._blocks[-1].is_closed():

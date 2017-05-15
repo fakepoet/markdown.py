@@ -3,53 +3,54 @@
 The ATX heading element.
 """
 from markdown.parser.base import BlockElementParser
+from markdown.parser.leaves.atx_heading_element import AtxHeadingElement
 
 
 class AtxHeadingParser(BlockElementParser):
 
     def __init__(self, config):
         super(AtxHeadingParser, self).__init__(config)
-        self._level = 0
-        self._title = ''
 
     def parse(self, code, index, auxiliary=None):
         start = index
         # 0~3 spaces
         success, index = self.check_indent(code, index)
         if not success:
-            return False, start
+            return None, start
         # 1~6 `#`s
         if index >= len(code) or code[index] != '#':
-            return False, start
-        self._level = 0
+            return None, start
+        level = 0
         while index < len(code) and code[index] == '#':
             index += 1
-            self._level += 1
-        if self._level > 6:
-            return False, start
+            level += 1
+        if level > 6:
+            return None, start
         # May be empty
-        if index == len(code):
-            return True, index
         if code[index] == '\n':
-            return True, index + 1
+            elem = AtxHeadingElement()
+            elem.set_level(level)
+            return elem, index + 1
         # One space is required
         if code[index] != ' ':
-            return False, start
+            return None, start
         # The title body
         start = index
         while index < len(code) and code[index] != '\n':
             index += 1
-        self._title = code[start:index].rstrip()
+        title = code[start:index].rstrip()
         # Remove arbitrary number of tailing `#`s
-        for i in range(len(self._title) - 1, -1, -1):
-            if self._title[i] == ' ':
-                self._title = self._title[:i]
+        for i in range(len(title) - 1, -1, -1):
+            if title[i] == ' ':
+                title = title[:i]
                 break
-            elif self._title[i] != '#':
+            elif title[i] != '#':
                 break
-        self._title = self._title.strip()
-        self.close()
-        return True, index + 1
+        title = title.strip()
+        elem = AtxHeadingElement()
+        elem.set_level(level)
+        elem.set_title(title)
+        return elem, index + 1
 
     def get_level(self):
         return self._level
