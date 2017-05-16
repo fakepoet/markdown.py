@@ -24,10 +24,9 @@ class CommonHTMLPrinter(Printer):
         return html
 
     @staticmethod
-    def print_paragraph(paragraph):
+    def print_paragraph_element(paragraph):
         text = paragraph.get_inlines()[0]
         if paragraph.is_setext():
-            text = text.replace('\n', ' ')
             if paragraph.get_level() == 1:
                 return '<h1>' + text + '</h1>\n'
             return '<h2>' + text + '</h2>\n'
@@ -36,11 +35,11 @@ class CommonHTMLPrinter(Printer):
         return '<p>' + text + '</p>\n'
 
     @staticmethod
-    def print_thematic_break(_):
+    def print_thematic_break_element(_):
         return '<hr />\n'
 
     @staticmethod
-    def print_atx_heading(atx_heading):
+    def print_atx_heading_element(atx_heading):
         level = atx_heading.get_level()
         text = atx_heading.get_inlines()[0]
         return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'

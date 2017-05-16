@@ -2,7 +2,7 @@
 """
 The markdown parser.
 """
-from .container import Container
+from markdown.parser.containers.container_parser import ContainerParser
 
 
 class Parser(object):
@@ -21,8 +21,15 @@ class Parser(object):
         """
         if config is None:
             config = {}
+        # Replace insecure characters
+        code = code.replace(u'\u0000', u'\uFFFD')
+        # Replace line endings with newline (U+000A) character
+        code = code.replace('\r\n', '\n').replace('\r', '\n')
+        # Add a newline character to the end of code
+        if len(code) > 0 and code[-1] != '\n':
+            code += '\n'
         config['link_references'] = {}
         config['links'] = []
-        container_parser = Container(config)
+        container_parser = ContainerParser(config)
         container_parser.parse(code, 0)
         return container_parser.get_blocks()

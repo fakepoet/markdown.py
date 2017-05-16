@@ -2,13 +2,13 @@
 """
 The bullet list element.
 """
-from .list import List
+from markdown.parser.containers.list_parser import ListParser
 
 
-class BulletList(List):
+class BulletListParser(ListParser):
 
     def __init__(self, config):
-        super(BulletList, self).__init__(config)
+        super(BulletListParser, self).__init__(config)
 
     def parse(self, code, index, auxiliary=None):
         pass

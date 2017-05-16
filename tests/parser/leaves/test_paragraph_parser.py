@@ -3,7 +3,7 @@ import unittest
 from markdown import Parser
 
 
-class TestParagraph(unittest.TestCase):
+class TestParagraphParser(unittest.TestCase):
 
     def test_common__0_27__180(self):
         code = 'aaa\n\nbbb'
