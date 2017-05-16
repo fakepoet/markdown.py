@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-"""
-The ATX heading element.
-"""
 from markdown.parser.base import BlockElementParser
 from markdown.parser.leaves.atx_heading_element import AtxHeadingElement
 
 
 class AtxHeadingParser(BlockElementParser):
+    """
+    The ATX heading parser.
+    """
 
     def __init__(self, config):
         super(AtxHeadingParser, self).__init__(config)

@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-"""
-The paragraph element.
-"""
 from markdown.parser.base import BlockElementParser
 from markdown.parser.util import ParseUtil
 from markdown.parser.leaves.paragraph_element import ParagraphElement
 
 
 class ParagraphParser(BlockElementParser):
+    """
+    The paragraph parser.
+    """
 
     def __init__(self, config):
         super(ParagraphParser, self).__init__(config)
