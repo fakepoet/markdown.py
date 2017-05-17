@@ -19,3 +19,15 @@ class ContainerElement(BlockElement):
             An array.
         """
         return self._blocks
+
+    def add_block(self, block):
+        """
+        Append a block element.
+
+        Args:
+            block: a block element.
+
+        Returns:
+            None.
+        """
+        self._blocks.append(block)

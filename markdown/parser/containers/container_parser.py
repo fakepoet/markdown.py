@@ -14,10 +14,13 @@ class ContainerParser(BlockElementParser):
     def __init__(self, config):
         super(ContainerParser, self).__init__(config)
         self._blocks = []  # The parsed block elements.
+
+        thematic_break_parser = ThematicBreakParser(config)
+        atx_heading_parser = AtxHeadingParser(config)
         self._paragraph_parser = ParagraphParser(config)
         self._interrupt_parsers = [
-            ThematicBreakParser(config),
-            AtxHeadingParser(config),
+            thematic_break_parser,
+            atx_heading_parser,
             # FencedCodeBlockParser(config),
             # HtmlBlockParser(config)  # Type 1-6,
             # ListParser(config)       # Not empty,
@@ -28,8 +31,8 @@ class ContainerParser(BlockElementParser):
             # OrderedListParser(config),
         ]
         self._block_parsers = [
-            ThematicBreakParser(config),
-            AtxHeadingParser(config),
+            thematic_break_parser,
+            atx_heading_parser,
             self._paragraph_parser,
         ]
 
