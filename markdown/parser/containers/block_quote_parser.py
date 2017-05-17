@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-"""
-The block quote element.
-"""
-from markdown.parser.base.block_element_parser import BlockElementParser
+from markdown.parser.base import ContainerElementParser
 
 
-class BlockQuoteParser(BlockElementParser):
+class BlockQuoteParser(ContainerElementParser):
+    """
+    The block quote parser.
+    """
 
     def __init__(self, config):
         super(BlockQuoteParser, self).__init__(config)

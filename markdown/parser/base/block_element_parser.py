@@ -51,7 +51,7 @@ class BlockElementParser(ElementParser):
 
     def is_interrupting(self, auxiliary):
         """
-        Whether it is interrupting a paragraph
+        Whether it is interrupting a paragraph.
 
         Args:
             auxiliary: A dict.

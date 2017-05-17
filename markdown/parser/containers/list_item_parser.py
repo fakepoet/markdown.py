@@ -1,14 +1,18 @@
 #!/usr/bin/env python
-"""
-The block quote element.
-"""
-from markdown.parser.base.block_element_parser import BlockElementParser
+from markdown.parser.base import ContainerElementParser
 
 
-class BlockQuoteParser(BlockElementParser):
+class ListItemParser(ContainerElementParser):
+    """
+    The block quote element.
+    """
 
     def __init__(self, config):
-        super(BlockQuoteParser, self).__init__(config)
+        super(ListItemParser, self).__init__(config)
 
     def parse(self, code, index, auxiliary=None):
-        return None, index
+        start = index
+        # 0~3 spaces
+        success, index = self.check_indent(code, index)
+        if not success:
+            return None, start
