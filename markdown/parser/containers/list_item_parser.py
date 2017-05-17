@@ -13,6 +13,7 @@ class ListItemParser(ContainerElementParser):
     def parse(self, code, index, auxiliary=None):
         start = index
         # 0~3 spaces
-        success, index = self.check_indent(code, index)
+        align = self.get_align()
+        success, index = self.check_indent(code, index, align)
         if not success:
             return None, start

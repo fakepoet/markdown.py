@@ -37,32 +37,35 @@ class ContainerParser(BlockElementParser):
         ]
 
     def parse(self, code, index, auxiliary=None):
-        index = 0
-        while index < len(code):
+        lines = code.split('\n')
+        for line_num, line in enumerate(lines):
+            # Try container parsers
+            index = 0
             # Continuation
             if len(self._blocks) > 0 and not self._blocks[-1].is_closed():
                 if isinstance(self._blocks[-1], ParagraphElement):
                     has_interrupted = False
                     for interrupt_parser in self._interrupt_parsers:
-                        elem, index = interrupt_parser.parse(code, index, {
+                        elem, index = interrupt_parser.parse(line, index, {
                             self.AUX_INTERRUPT: True
                         })
                         if elem is not None:
                             has_interrupted = True
                             self._blocks[-1].close()
+                            elem.set_line_num(line_num)
                             self._blocks.append(elem)
                             break
                     if not has_interrupted:
-                        elem, index = self._paragraph_parser.parse(code, index, {
+                        elem, index = self._paragraph_parser.parse(line, index, {
                             BlockElementParser.AUX_UNCLOSED: self._blocks[-1]
                         })
                         if not self._blocks[-1].is_closed():
                             continue
-            # Try container parsers
             # Try block parsers
             for block_parser in self._block_parsers:
-                elem, index = block_parser.parse(code, index)
+                elem, index = block_parser.parse(line, index)
                 if elem is not None:
+                    elem.set_line_num(line_num)
                     self._blocks.append(elem)
                     break
         if len(self._blocks) > 0:

@@ -15,13 +15,14 @@ class BlockElementParser(ElementParser):
         super(BlockElementParser, self).__init__(config)
 
     @staticmethod
-    def check_indent(code, index):
+    def check_indent(code, index, align=0):
         """
         Check whether the number of heading spaces is less than 4.
 
         Args:
             code: An UTF-8 string.
             index: The start index (inclusive) of the current parsing.
+            align: The align index.
 
         Returns:
             A tuple (success, index) indicating:

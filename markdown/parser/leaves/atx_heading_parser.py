@@ -27,7 +27,7 @@ class AtxHeadingParser(BlockElementParser):
         if level > 6:
             return None, start
         # May be empty
-        if code[index] == '\n':
+        if index == len(code):
             elem = AtxHeadingElement()
             elem.set_level(level)
             return elem, index + 1
