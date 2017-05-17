@@ -12,15 +12,14 @@ class ThematicBreakParser(BlockElementParser):
         super(ThematicBreakParser, self).__init__(config)
 
     def parse(self, code, index, auxiliary=None):
-        start = index
         success, index = self.check_indent(code, index)
         if not success:
-            return None, start
+            return None
         if index >= len(code):
-            return None, start
+            return None
         first = code[index]
         if first not in ['*', '-', '_']:
-            return None, start
+            return None
         count = 0
         has_space = False
         has_inner_space = False
@@ -32,10 +31,10 @@ class ThematicBreakParser(BlockElementParser):
             elif code[index] in [' ', '\t']:
                 has_space = True
             else:
-                return None, start
+                return None
             index += 1
         if count < 3:
-            return None, start
+            return None
         if self.is_interrupting(auxiliary) and first == '-' and not has_inner_space:
-            return None, start
-        return ThematicBreakElement(), index + 1
+            return None
+        return ThematicBreakElement()

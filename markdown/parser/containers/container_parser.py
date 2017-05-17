@@ -5,6 +5,7 @@ Container (block quotes and lists) parser.
 from markdown.parser.base import BlockElementParser
 from markdown.parser.leaves import AtxHeadingParser
 from markdown.parser.leaves import ParagraphElement
+from markdown.parser.leaves import EmptyLineElement
 from markdown.parser.leaves import ParagraphParser
 from markdown.parser.leaves import ThematicBreakParser
 
@@ -39,6 +40,7 @@ class ContainerParser(BlockElementParser):
     def parse(self, code, index, auxiliary=None):
         lines = code.split('\n')
         for line_num, line in enumerate(lines):
+            line_num += 1
             # Try container parsers
             index = 0
             # Continuation
@@ -46,7 +48,7 @@ class ContainerParser(BlockElementParser):
                 if isinstance(self._blocks[-1], ParagraphElement):
                     has_interrupted = False
                     for interrupt_parser in self._interrupt_parsers:
-                        elem, index = interrupt_parser.parse(line, index, {
+                        elem = interrupt_parser.parse(line, index, {
                             self.AUX_INTERRUPT: True
                         })
                         if elem is not None:
@@ -56,18 +58,20 @@ class ContainerParser(BlockElementParser):
                             self._blocks.append(elem)
                             break
                     if not has_interrupted:
-                        elem, index = self._paragraph_parser.parse(line, index, {
+                        self._blocks[-1] = self._paragraph_parser.parse(line, index, {
                             BlockElementParser.AUX_UNCLOSED: self._blocks[-1]
                         })
-                        if not self._blocks[-1].is_closed():
-                            continue
+                continue
             # Try block parsers
             for block_parser in self._block_parsers:
-                elem, index = block_parser.parse(line, index)
+                elem = block_parser.parse(line, index)
                 if elem is not None:
+                    if isinstance(elem, EmptyLineElement):
+                        break
                     elem.set_line_num(line_num)
                     self._blocks.append(elem)
                     break
+            print line, self._blocks
         if len(self._blocks) > 0:
             self._blocks[-1].close()
 

@@ -2,6 +2,7 @@
 from markdown.parser.base import BlockElementParser
 from markdown.parser.util import ParseUtil
 from markdown.parser.leaves.paragraph_element import ParagraphElement
+from markdown.parser.leaves.empty_line_element import EmptyLineElement
 
 
 class ParagraphParser(BlockElementParser):
@@ -18,7 +19,7 @@ class ParagraphParser(BlockElementParser):
         if elem is None:
             success, index = self.check_indent(code, index)
             if not success:
-                return None, start
+                return None
         while index < len(code) and code[index] != '\n':
             index += 1
         last = code[start:index]
@@ -27,11 +28,11 @@ class ParagraphParser(BlockElementParser):
         if line == '':
             if elem is None:
                 # Consumes the empty line.
-                return None, index
+                return EmptyLineElement()
             else:
                 # The paragraph is closed by an empty line.
                 elem.close()
-                return elem, index
+                return elem
         if elem is None:
             elem = ParagraphElement()
         elem.append(line)
@@ -46,4 +47,4 @@ class ParagraphParser(BlockElementParser):
                     else:
                         elem.set_level(2)
                     elem.del_last_line()
-        return elem, index
+        return elem
