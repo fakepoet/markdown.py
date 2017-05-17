@@ -32,10 +32,3 @@ class TestParagraphElement(unittest.TestCase):
         self.assertFalse(self.elem.is_tight())
         self.elem.set_tight(True)
         self.assertTrue(self.elem.is_tight())
-
-    def test_setext(self):
-        self.assertFalse(self.elem.is_setext())
-        self.assertEqual(0, self.elem.get_level())
-        self.elem.set_level(1)
-        self.assertTrue(self.elem.is_setext())
-        self.assertEqual(1, self.elem.get_level())

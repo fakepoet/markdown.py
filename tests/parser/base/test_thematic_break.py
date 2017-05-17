@@ -4,6 +4,7 @@ import unittest
 from markdown import Parser
 from markdown.parser.leaves import ParagraphElement
 from markdown.parser.leaves import ThematicBreakElement
+from markdown.parser.leaves.setext_heading_element import SetextHeadingElement
 
 
 class TestThematicBreak(unittest.TestCase):
@@ -54,5 +55,5 @@ class TestThematicBreak(unittest.TestCase):
         code = 'Foo\n---\nbar'
         elements = Parser.parse(code)
         self.assertEqual(2, len(elements))
-        self.assertTrue(isinstance(elements[0], ParagraphElement))
+        self.assertTrue(isinstance(elements[0], SetextHeadingElement))
         self.assertTrue(isinstance(elements[1], ParagraphElement))

@@ -71,7 +71,6 @@ class ContainerParser(BlockElementParser):
                     elem.set_line_num(line_num)
                     self._blocks.append(elem)
                     break
-            print line, self._blocks
         if len(self._blocks) > 0:
             self._blocks[-1].close()
 
