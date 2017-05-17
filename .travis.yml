@@ -10,12 +10,12 @@ python:
   - "pypy3"
 branches:
   except:
-  - dev
+  - dev-no-travis
 install:
   - pip install -r requirements.txt
   - pip install coveralls
   - pip install pep8
 before_script: sh lint.sh
-script: nosetests --cover-package markdown --with-coverage tests
+script: sh test.sh
 after_success:
   coveralls
