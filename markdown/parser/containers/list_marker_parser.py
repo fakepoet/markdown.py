@@ -4,13 +4,13 @@ from markdown.parser.base import ContainerElementParser
 from markdown.parser.containers.list_element import ListElement
 
 
-class ListItemParser(ContainerElementParser):
+class ListMarkerParser(ContainerElementParser):
     """
-    The block quote element.
+    The list marker parser.
     """
 
     def __init__(self, config):
-        super(ListItemParser, self).__init__(config)
+        super(ListMarkerParser, self).__init__(config)
 
     def parse(self, code, index, auxiliary=None):
         start = index
@@ -23,9 +23,11 @@ class ListItemParser(ContainerElementParser):
             index += 1
             if index < len(code) and \
                     ParseUtil.is_unicode_white_space(code[index]):
+                index += 1
                 elem = ListElement()
                 elem.set_bullet()
-                return elem, index + 1
+                elem.set_offset(index)
+                return elem, index
         digit_num = 0
         while index < len(code) and ParseUtil.is_digit(code[index]):
             digit_num += 1
@@ -35,7 +37,9 @@ class ListItemParser(ContainerElementParser):
                 index += 1
                 if index < len(code) and \
                         ParseUtil.is_unicode_white_space(code[index]):
+                    index += 1
                     elem = ListElement()
                     elem.set_ordered()
-                    return elem, index + 1
+                    elem.set_offset(index)
+                    return elem, index
         return None, start
