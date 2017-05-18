@@ -29,8 +29,10 @@ class ListMarkerParser(ContainerElementParser):
                 elem.set_offset(index)
                 return elem, index
         digit_num = 0
+        start_num = 0
         while index < len(code) and ParseUtil.is_digit(code[index]):
             digit_num += 1
+            start_num = start_num * 10 + ord(code[index]) - ord('0')
             index += 1
         if 1 <= digit_num <= 9:
             if index < len(code) and code[index] in ['.', ')']:
@@ -41,5 +43,6 @@ class ListMarkerParser(ContainerElementParser):
                     elem = ListElement()
                     elem.set_ordered()
                     elem.set_offset(index)
+                    elem.set_start_number(start_num)
                     return elem, index
         return None, start

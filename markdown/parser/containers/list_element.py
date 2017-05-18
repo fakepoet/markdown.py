@@ -11,7 +11,6 @@ class ListElement(ContainerElement):
         super(ListElement, self).__init__()
         self._is_bullet = True
         self._start = 1
-        self._offset = 0
 
     def set_bullet(self):
         self._is_bullet = True
@@ -25,11 +24,8 @@ class ListElement(ContainerElement):
     def is_ordered(self):
         return not self._is_bullet
 
+    def set_start_number(self, start):
+        self._start = start
+
     def start_number(self):
         return self._start
-
-    def set_offset(self, offset):
-        self._offset = offset
-
-    def offset(self):
-        return self._offset

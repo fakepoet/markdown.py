@@ -24,7 +24,6 @@ class ContainerParser(BlockElementParser):
             atx_heading_parser,
             # FencedCodeBlockParser(config),
             # HtmlBlockParser(config)  # Type 1-6,
-            # ListParser(config)       # Not empty,
         ]
         self._container_parsers = [
             # BlockQuoteParser(config),
