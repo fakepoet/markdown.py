@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 from markdown.parser.util import ParseUtil
 from markdown.parser.base import ContainerElementParser
 from markdown.parser.containers.list_element import ListElement
@@ -7,6 +8,13 @@ from markdown.parser.containers.list_element import ListElement
 class ListMarkerParser(ContainerElementParser):
     """
     The list marker parser.
+
+    A list marker is a bullet list marker or an ordered list marker.
+
+    A bullet list marker is a -, +, or * character.
+
+    An ordered list marker is a sequence of 1–9 arabic digits (0-9),
+    followed by either a . character or a ) character.
     """
 
     def __init__(self, config):

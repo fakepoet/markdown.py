@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 from markdown.parser.base import BlockElementParser
 from markdown.parser.util import ParseUtil
 from markdown.parser.leaves.paragraph_element import ParagraphElement
@@ -9,6 +10,12 @@ from markdown.parser.leaves.empty_line_element import EmptyLineElement
 class ParagraphParser(BlockElementParser):
     """
     The paragraph parser.
+
+    A sequence of non-blank lines that cannot be interpreted as other
+    kinds of blocks forms a paragraph. The contents of the paragraph are
+    the result of parsing the paragraph’s raw content as inlines. The
+    paragraph’s raw content is formed by concatenating the lines and
+    removing initial and final whitespace.
     """
 
     def __init__(self, config):
