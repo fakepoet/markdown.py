@@ -19,8 +19,7 @@ class BlockQuoteMarkerParser(ContainerElementParser):
     def parse(self, code, index, auxiliary=None):
         start = index
         # 0~3 spaces
-        align = self.get_align()
-        success, index = self.check_indent(code, index, align)
+        success, index = self.check_indent(code, index)
         if not success:
             return None, start
         if index >= len(code) or code[index] != '>':

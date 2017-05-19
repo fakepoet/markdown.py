@@ -23,7 +23,7 @@ class ListMarkerParser(ContainerElementParser):
     def parse(self, code, index, auxiliary=None):
         start = index
         # 0~3 spaces
-        align = self.get_align()
+        align = self.get_align(auxiliary)
         success, index = self.check_indent(code, index, align)
         if not success:
             return None, start
