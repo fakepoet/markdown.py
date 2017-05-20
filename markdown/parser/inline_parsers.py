@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from .inline_elements import TextElement
+from .inline_elements import TextualContentElement
 
 
 class InlineParser(object):
@@ -10,6 +10,6 @@ class InlineParser(object):
         pass
 
     def parse(self, code):
-        elem = TextElement()
+        elem = TextualContentElement()
         elem.subs = [code]
         return elem

@@ -9,11 +9,11 @@ class InlineElement(object):
         self.subs = []       # The sub elements.
 
 
-class TextElement(InlineElement):
+class TextualContentElement(InlineElement):
     """The text element."""
 
     def __init__(self):
-        super(TextElement, self).__init__()
+        super(TextualContentElement, self).__init__()
 
 
 class SoftLineBreakElement(InlineElement):

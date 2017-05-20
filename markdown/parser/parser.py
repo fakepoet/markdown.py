@@ -10,7 +10,7 @@ from markdown.parser.block_elements import \
     ParagraphElement, \
     BlankLineElement
 from markdown.parser.inline_parsers import InlineParser
-from markdown.parser.inline_elements import TextElement
+from markdown.parser.inline_elements import TextualContentElement
 
 
 class Parser(object):
@@ -138,7 +138,7 @@ class Parser(object):
                 break
 
     def parse_subs(self, elem):
-        if isinstance(elem, TextElement):
+        if isinstance(elem, TextualContentElement):
             return elem
         try:
             for i, sub in enumerate(elem.subs):
