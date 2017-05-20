@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from markdown.parser.util import ParseUtil
+from markdown.parser.parse_util import ParseUtil
 from markdown.parser.base import ContainerElementParser
 from markdown.parser.containers.block_quote_element import BlockQuoteElement
 

@@ -20,10 +20,10 @@ class ParseUtil(object):
         """
         num = 0
         for c in line[index:]:
-            if c == ' ':
-                num += 1
-            elif c == '\t':
+            if c == '\t':
                 num += 4
+            elif ParseUtil.is_unicode_white_space(c):
+                num += 1
             else:
                 break
         return num

@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-from markdown.parser.base.block_element import BlockElement
 
 
-class ContainerElement(BlockElement):
+class ContainerElement(object):
     """
     The abstract container element.
     """

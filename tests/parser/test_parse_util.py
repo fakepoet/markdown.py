@@ -1,6 +1,6 @@
 #!/usr/env/bin python
 import unittest
-from markdown.parser.util import ParseUtil
+from markdown.parser.parse_util import ParseUtil
 
 
 class TestParseUtil(unittest.TestCase):
