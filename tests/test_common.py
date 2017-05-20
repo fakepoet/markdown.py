@@ -27,7 +27,8 @@ class TestCommon(unittest.TestCase):
             standard_output = reader.read()
         parser = Parser()
         parsed = parser.parse(standard_input)
-        html = str(CommonHTMLPrinter(parsed))
+        printer = CommonHTMLPrinter()
+        html = printer.to_html(parsed)
         message = 'Common: ' + str(index) + '\n'
         message += '=' * 80 + '\n'
         message += standard_output

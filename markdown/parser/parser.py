@@ -9,6 +9,8 @@ from markdown.parser.block_parsers import \
 from markdown.parser.block_elements import \
     ParagraphElement, \
     BlankLineElement
+from markdown.parser.inline_parsers import InlineParser
+from markdown.parser.inline_elements import TextElement
 
 
 class Parser(object):
@@ -28,6 +30,7 @@ class Parser(object):
         self._interrupt_parsers = []
         self._container_parsers = []
         self._block_parsers = []
+        self._inline_parse = InlineParser()
         self.init_parsers(config)
 
         self._layers = []
@@ -60,6 +63,7 @@ class Parser(object):
         if len(self._blocks) > 0:
             self._blocks[-1].close()
 
+        self._blocks = [self.parse_subs(block) for block in self._blocks]
         return self._blocks
 
     def init_parsers(self, config):
@@ -132,3 +136,13 @@ class Parser(object):
                 elem.line_num = self._line_num
                 self._blocks.append(elem)
                 break
+
+    def parse_subs(self, elem):
+        if isinstance(elem, TextElement):
+            return elem
+        try:
+            for i, sub in enumerate(elem.subs):
+                elem.subs[i] = self.parse_subs(self._inline_parse.parse(sub))
+        except AttributeError:
+            pass
+        return elem

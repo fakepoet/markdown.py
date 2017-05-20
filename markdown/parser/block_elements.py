@@ -6,7 +6,6 @@ class BlockElement(object):
     """The abstract block element."""
 
     def __init__(self):
-        super(BlockElement, self).__init__()
         self.line_num = 0    # The first number of line in source code.
         self.subs = []       # The sub elements.
         self.closed = False  # Whether the continuation is done.

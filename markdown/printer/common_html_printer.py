@@ -1,48 +1,55 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from .printer import Printer
+import operator
+from markdown.parser.inline_elements import SoftLineBreakElement
 
 
-class CommonHTMLPrinter(Printer):
+class CommonHTMLPrinter(object):
 
-    def __init__(self, blocks):
-        super(CommonHTMLPrinter, self).__init__(blocks)
+    def __init__(self):
+        pass
 
-    def __str__(self):
+    def to_html(self, blocks):
         html = u''
-        maps = {}
-        for block in self._blocks:
+        for block in blocks:
             name = block.__class__.__name__
-            if name not in maps:
-                def mapping(ch):
-                    if 'A' <= ch <= 'Z':
-                        return '_' + chr(ord(ch) - ord('A') + ord('a'))
-                    return ch
-                maps[name] = ''.join(map(mapping, name))[1:]
-            name = 'print_' + maps[name]
-            html += getattr(CommonHTMLPrinter, name)(block)
+            if name == 'TextElement':
+                html += self.print_text_element(block)
+            elif name == 'SoftLineBreakElement':
+                html += '\n'
+            elif name == 'ParagraphElement':
+                html += self.print_paragraph_element(block)
+            elif name == 'AtxHeadingElement':
+                html += self.print_atx_heading_element(block)
+            elif name == 'SetextHeadingElement':
+                html += self.print_setext_heading_element(block)
+            elif name == 'ThematicBreakElement':
+                html += self.print_thematic_break_element()
         return html
 
-    @staticmethod
-    def print_paragraph_element(paragraph):
-        text = '\n'.join(paragraph.subs)
+    def print_text_element(self, text):
+        return text.subs[0]
+
+    def print_paragraph_element(self, paragraph):
+        elem = SoftLineBreakElement()
+        subs = [[sub, elem] for sub in paragraph.subs]
+        text = self.to_html(reduce(operator.add, subs)[:-1])
         if paragraph.tight:
             return text + '\n'
         return '<p>' + text + '</p>\n'
 
-    @staticmethod
-    def print_thematic_break_element(_):
-        return '<hr />\n'
-
-    @staticmethod
-    def print_atx_heading_element(atx_heading):
+    def print_atx_heading_element(self, atx_heading):
         level = atx_heading.level
-        text = atx_heading.subs[0]
-        return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'
+        return '<h' + str(level) + '>' + \
+               self.to_html(atx_heading.subs) + \
+               '</h' + str(level) + '>\n'
 
-    @staticmethod
-    def print_setext_heading_element(setext_heading):
+    def print_setext_heading_element(self, setext_heading):
         level = setext_heading.level
-        text = setext_heading.subs[0]
-        return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'
+        return '<h' + str(level) + '>' + \
+               self.to_html(setext_heading.subs) + \
+               '</h' + str(level) + '>\n'
+
+    def print_thematic_break_element(self):
+        return '<hr />\n'
