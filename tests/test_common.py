@@ -25,7 +25,8 @@ class TestCommon(unittest.TestCase):
         output_path = os.path.join(path, str(index) + '.out')
         with codecs.open(output_path, 'r', 'utf8') as reader:
             standard_output = reader.read()
-        parsed = Parser.parse(standard_input)
+        parser = Parser()
+        parsed = parser.parse(standard_input)
         html = str(CommonHTMLPrinter(parsed))
         message = 'Common: ' + str(index) + '\n'
         message += '=' * 80 + '\n'
