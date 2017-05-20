@@ -10,6 +10,7 @@ class ContainerElement(BlockElement):
     def __init__(self):
         super(ContainerElement, self).__init__()
         self._blocks = []
+        self._offset = 0
 
     def get_blocks(self):
         """
@@ -31,3 +32,9 @@ class ContainerElement(BlockElement):
             None.
         """
         self._blocks.append(block)
+
+    def set_offset(self, offset):
+        self._offset = offset
+
+    def offset(self):
+        return self._offset

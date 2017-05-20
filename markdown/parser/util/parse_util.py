@@ -29,6 +29,10 @@ class ParseUtil(object):
         return num
 
     @staticmethod
+    def is_digit(char):
+        return '0' <= char <= '9'
+
+    @staticmethod
     def is_white_space(char):
         """
         A whitespace character is a space (U+0020), tab (U+0009), newline (U+000A),

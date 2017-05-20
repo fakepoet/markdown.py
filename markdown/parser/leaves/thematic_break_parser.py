@@ -6,6 +6,10 @@ from markdown.parser.leaves.thematic_break_element import ThematicBreakElement
 class ThematicBreakParser(BlockElementParser):
     """
     The thematic break parser.
+
+    A line consisting of 0-3 spaces of indentation, followed by a
+    sequence of three or more matching -, _, or * characters, each
+    followed optionally by any number of spaces, forms a thematic break.
     """
 
     def __init__(self, config):
