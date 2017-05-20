@@ -9,6 +9,12 @@ from markdown import CommonHTMLPrinter
 
 class TestCommon(unittest.TestCase):
 
+    def print_tree(self, node, indent=0):
+        print(' ' * indent + str(node))
+        if hasattr(node, 'subs'):
+            for sub in node.subs:
+                self.print_tree(sub, indent + 4)
+
     def check(self, index):
         path = os.path.join('cases', 'common')
         if not os.path.exists(path):
@@ -27,6 +33,7 @@ class TestCommon(unittest.TestCase):
         message += '-' * 80 + '\n'
         message += html
         message += '=' * 80 + '\n'
+        self.print_tree(parsed)
         self.assertEqual(standard_output, html, message)
 
     def test_commons(self):

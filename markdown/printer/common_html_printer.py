@@ -25,8 +25,8 @@ class CommonHTMLPrinter(Printer):
 
     @staticmethod
     def print_paragraph_element(paragraph):
-        text = paragraph.get_inlines()[0]
-        if paragraph.is_tight():
+        text = '\n'.join(paragraph.subs)
+        if paragraph.tight:
             return text + '\n'
         return '<p>' + text + '</p>\n'
 
@@ -36,12 +36,12 @@ class CommonHTMLPrinter(Printer):
 
     @staticmethod
     def print_atx_heading_element(atx_heading):
-        level = atx_heading.get_level()
-        text = atx_heading.get_inlines()[0]
+        level = atx_heading.level
+        text = atx_heading.subs[0]
         return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'
 
     @staticmethod
     def print_setext_heading_element(setext_heading):
-        level = setext_heading.get_level()
-        text = setext_heading.get_inlines()[0]
+        level = setext_heading.level
+        text = setext_heading.subs[0]
         return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'

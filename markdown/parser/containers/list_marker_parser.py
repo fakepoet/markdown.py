@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
-from markdown.parser.util import ParseUtil
+from markdown.parser.parse_util import ParseUtil
 from markdown.parser.base import ContainerElementParser
 from markdown.parser.containers.list_element import ListElement
 

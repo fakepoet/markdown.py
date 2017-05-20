@@ -31,5 +31,5 @@ class Parser(object):
         config['link_references'] = {}
         config['links'] = []
         container_parser = ContainerParser(config)
-        container_parser.parse(code, 0)
+        container_parser.parse(code)
         return container_parser.get_blocks()

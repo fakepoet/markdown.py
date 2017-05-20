@@ -1,29 +1,22 @@
 #!/usr/bin/env python
-"""
-Container (block quotes and lists) parser.
-"""
-from markdown.parser.base import BlockElementParser
-from markdown.parser.base import ContainerElementParser
-from markdown.parser.leaves import AtxHeadingParser
-from markdown.parser.leaves import ParagraphElement
-from markdown.parser.leaves import EmptyLineElement
-from markdown.parser.leaves import ParagraphParser
-from markdown.parser.leaves import ThematicBreakParser
-from markdown.parser.containers.block_quote_marker_parser import BlockQuoteMarkerParser
-from markdown.parser.containers.list_marker_parser import ListMarkerParser
-from markdown.parser.containers.block_quote_element import BlockQuoteElement
-from markdown.parser.containers.list_element import ListElement
+from markdown.parser.block_parsers import \
+    BlockElementParser, \
+    ParagraphParser, \
+    AtxHeadingParser, \
+    ThematicBreakParser
+from markdown.parser.block_elements import \
+    ParagraphElement, \
+    BlankLineElement
 
 
-class ContainerParser(BlockElementParser):
+class ContainerParser(object):
 
     def __init__(self, config):
-        super(ContainerParser, self).__init__(config)
         self._blocks = []  # The parsed block elements.
 
         self._paragraph_parser = ParagraphParser(config)
-        self._block_quote_marker_parser = BlockQuoteMarkerParser(config)
-        self._list_marker_parser = ListMarkerParser(config)
+        # self._block_quote_marker_parser = BlockQuoteMarkerParser(config)
+        # self._list_marker_parser = ListMarkerParser(config)
         self._interrupt_parsers = []
         self._container_parsers = []
         self._block_parsers = []
@@ -55,7 +48,7 @@ class ContainerParser(BlockElementParser):
     def get_blocks(self):
         return self._blocks
 
-    def parse(self, code, index, auxiliary=None):
+    def parse(self, code):
         lines = code.split('\n')
         for line_num, line in enumerate(lines):
             self._line_num = line_num + 1
@@ -66,6 +59,7 @@ class ContainerParser(BlockElementParser):
             self._blocks[-1].close()
 
     def parse_container_markers(self, line):
+        """
         index = 0
         layer_index = 0
         while False:
@@ -81,19 +75,21 @@ class ContainerParser(BlockElementParser):
                 if not elem:
                     break
         return index
+        """
+        return 0
 
     def parse_continuation(self, line, index):
-        if len(self._blocks) > 0 and not self._blocks[-1].is_closed():
+        if len(self._blocks) > 0 and not self._blocks[-1].closed:
             if isinstance(self._blocks[-1], ParagraphElement):
                 has_interrupted = False
                 for interrupt_parser in self._interrupt_parsers:
                     elem = interrupt_parser.parse(line, index, {
-                        self.AUX_INTERRUPT: True
+                        BlockElementParser.AUX_INTERRUPT: True
                     })
                     if elem is not None:
                         has_interrupted = True
                         self._blocks[-1].close()
-                        elem.set_line_num(self._line_num)
+                        elem.line_num = self._line_num
                         self._blocks.append(elem)
                         break
                 if not has_interrupted:
@@ -107,8 +103,8 @@ class ContainerParser(BlockElementParser):
         for block_parser in self._block_parsers:
             elem = block_parser.parse(line, index)
             if elem is not None:
-                if isinstance(elem, EmptyLineElement):
+                if isinstance(elem, BlankLineElement):
                     break
-                elem.set_line_num(self._line_num)
+                elem.line_num = self._line_num
                 self._blocks.append(elem)
                 break
