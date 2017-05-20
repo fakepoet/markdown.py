@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import operator
+from itertools import chain
 from markdown.parser.block_elements import (ParagraphElement,
                                             AtxHeadingElement,
                                             SetextHeadingElement,
@@ -25,7 +25,7 @@ class CommonHTMLPrinter(object):
             elif isinstance(block, ParagraphElement):
                 elem = SoftLineBreakElement()
                 subs = [[sub, elem] for sub in block.subs]
-                text = self.to_html(reduce(operator.add, subs)[:-1])
+                text = self.to_html(list(chain(*subs))[:-1])
                 if block.tight:
                     html += text + '\n'
                 else:

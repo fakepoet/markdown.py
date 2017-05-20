@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+from .parse_util import ParseUtil
+
 
 class BlockElement(object):
     """The abstract block element."""
@@ -26,6 +28,15 @@ class ParagraphElement(BlockElement):
         super(ParagraphElement, self).close()
         if len(self.subs) > 0:
             self.subs[-1] = self.subs[-1].rstrip()
+        self.subs = [ParagraphElement.strip_line(line) for line in self.subs]
+
+    @staticmethod
+    def strip_line(line):
+        num = ParseUtil.get_heading_space_num(line[::-1])
+        line = line.rstrip()
+        if num >= 2:
+            line += '<br />'
+        return line
 
 
 class BlankLineElement(BlockElement):
