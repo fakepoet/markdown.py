@@ -20,6 +20,8 @@ class ElementParser(object):
             auxiliary: A dictionary with auxiliary information.
 
         Returns:
+            For leaf elements, only the element is returned, otherwise:
+
             A tuple (element, index) indicating:
                 element: an element if successfully parsed, otherwise None.
                 index: the end index (exclusive) of the parsing.

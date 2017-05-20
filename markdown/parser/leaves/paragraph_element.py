@@ -11,7 +11,6 @@ class ParagraphElement(BlockElement):
         super(ParagraphElement, self).__init__()
         self._lines = []     # The lines of the paragraph.
         self._tight = False  # Whether the paragraph is tight in a list item.
-        self._level = 0      # 0 if it is not a setext heading, otherwise it could be 1 or 2.
 
     def get_lines(self):
         return self._lines
@@ -36,12 +35,3 @@ class ParagraphElement(BlockElement):
 
     def is_tight(self):
         return self._tight
-
-    def is_setext(self):
-        return self._level != 0
-
-    def set_level(self, level):
-        self._level = level
-
-    def get_level(self):
-        return self._level
