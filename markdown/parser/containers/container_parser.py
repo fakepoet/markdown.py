@@ -52,7 +52,6 @@ class ContainerParser(object):
         lines = code.split('\n')
         for line_num, line in enumerate(lines):
             self._line_num = line_num + 1
-            print self._line_num, self._blocks
             index = self.parse_container_markers(line)
             if not self.parse_continuation(line, index):
                 self.parse_blocks(line, index)

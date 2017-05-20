@@ -107,7 +107,6 @@ class ParagraphParser(BlockElementParser):
         if elem is None:
             elem = ParagraphElement()
         elem.subs.append(line)
-        print elem.subs
         if len(elem.subs) >= 2:
             if ParseUtil.get_heading_space_num(last) < 4:
                 line = line.rstrip()
