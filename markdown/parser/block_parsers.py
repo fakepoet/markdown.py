@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
-from markdown.parser.parse_util import ParseUtil
+
+from .parse_util import ParseUtil
 from .block_elements import ParagraphElement, \
     BlankLineElement, \
     AtxHeadingElement, \

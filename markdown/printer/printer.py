@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-"""
-The abstract printer class.
-"""
+# coding=utf-8
 
 
 class Printer(object):
+    """The abstract printer class."""
 
     def __init__(self, blocks):
         self._blocks = blocks

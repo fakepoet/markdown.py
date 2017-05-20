@@ -7,9 +7,7 @@ from .container_elements import (BlockQuoteElement,
 
 
 class ContainerElementParser(object):
-    """
-    The abstract container element parser.
-    """
+    """The abstract container element parser."""
 
     AUX_ALIGN = 'align'  # The align offset for lists.
 

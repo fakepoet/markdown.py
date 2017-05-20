@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-"""
-Some functions about characters and strings.
-"""
+# coding=utf-8
 
 
 class ParseUtil(object):
+    """Some functions about characters and strings."""
 
     @staticmethod
     def get_heading_space_num(line, index=0):

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 from markdown.parser.block_parsers import \
     BlockElementParser, \
