@@ -1,47 +1,41 @@
 #!/usr/bin/env python
 # coding=utf-8
-from .printer import Printer
+
+import operator
+from markdown.parser.block_elements import (ParagraphElement,
+                                            AtxHeadingElement,
+                                            SetextHeadingElement,
+                                            ThematicBreakElement)
+from markdown.parser.inline_elements import (TextualContentElement,
+                                             SoftLineBreakElement)
 
 
-class CommonHTMLPrinter(Printer):
+class CommonHTMLPrinter(object):
 
-    def __init__(self, blocks):
-        super(CommonHTMLPrinter, self).__init__(blocks)
+    def __init__(self):
+        pass
 
-    def __str__(self):
+    def to_html(self, blocks):
         html = u''
-        maps = {}
-        for block in self._blocks:
-            name = block.__class__.__name__
-            if name not in maps:
-                def mapping(ch):
-                    if 'A' <= ch <= 'Z':
-                        return '_' + chr(ord(ch) - ord('A') + ord('a'))
-                    return ch
-                maps[name] = ''.join(map(mapping, name))[1:]
-            name = 'print_' + maps[name]
-            html += getattr(CommonHTMLPrinter, name)(block)
+        for block in blocks:
+            if isinstance(block, TextualContentElement):
+                html += block.subs[0]
+            elif isinstance(block, SoftLineBreakElement):
+                html += '\n'
+            elif isinstance(block, ParagraphElement):
+                elem = SoftLineBreakElement()
+                subs = [[sub, elem] for sub in block.subs]
+                text = self.to_html(reduce(operator.add, subs)[:-1])
+                if block.tight:
+                    html += text + '\n'
+                else:
+                    html += '<p>' + text + '</p>\n'
+            elif isinstance(block, AtxHeadingElement) or \
+                    isinstance(block, SetextHeadingElement):
+                level = block.level
+                html += '<h' + str(level) + '>' + \
+                        self.to_html(block.subs) + \
+                        '</h' + str(level) + '>\n'
+            elif isinstance(block, ThematicBreakElement):
+                html += '<hr />\n'
         return html
-
-    @staticmethod
-    def print_paragraph_element(paragraph):
-        text = paragraph.get_inlines()[0]
-        if paragraph.is_tight():
-            return text + '\n'
-        return '<p>' + text + '</p>\n'
-
-    @staticmethod
-    def print_thematic_break_element(_):
-        return '<hr />\n'
-
-    @staticmethod
-    def print_atx_heading_element(atx_heading):
-        level = atx_heading.get_level()
-        text = atx_heading.get_inlines()[0]
-        return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'
-
-    @staticmethod
-    def print_setext_heading_element(setext_heading):
-        level = setext_heading.get_level()
-        text = setext_heading.get_inlines()[0]
-        return '<h' + str(level) + '>' + text + '</h' + str(level) + '>\n'

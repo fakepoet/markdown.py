@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-"""
-Some functions about characters and strings.
-"""
+# coding=utf-8
 
 
 class ParseUtil(object):
+    """Some functions about characters and strings."""
 
     @staticmethod
     def get_heading_space_num(line, index=0):
@@ -20,13 +19,17 @@ class ParseUtil(object):
         """
         num = 0
         for c in line[index:]:
-            if c == ' ':
-                num += 1
-            elif c == '\t':
+            if c == '\t':
                 num += 4
+            elif ParseUtil.is_unicode_white_space(c):
+                num += 1
             else:
                 break
         return num
+
+    @staticmethod
+    def is_digit(char):
+        return '0' <= char <= '9'
 
     @staticmethod
     def is_white_space(char):
