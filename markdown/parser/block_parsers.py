@@ -2,11 +2,21 @@
 # coding=utf-8
 
 from .parse_util import ParseUtil
-from .block_elements import ParagraphElement, \
-    BlankLineElement, \
-    AtxHeadingElement, \
-    SetextHeadingElement, \
-    ThematicBreakElement
+
+from .block_elements import (ParagraphElement,
+                             BlankLineElement,
+                             AtxHeadingElement,
+                             SetextHeadingElement,
+                             ThematicBreakElement,
+                             LinkReferenceDefinitions)
+
+import sys
+if sys.version_info[0] >= 3:
+    def casefold(x):
+        return x.casefold()
+else:
+    import py2casefold
+    casefold = py2casefold.casefold
 
 
 class BlockElementParser(object):
@@ -210,7 +220,7 @@ class ThematicBreakParser(BlockElementParser):
         count = 0
         has_space = False
         has_inner_space = False
-        while index < len(code) and code[index] != '\n':
+        while index < len(code):
             if code[index] == first:
                 count += 1
                 if has_space:
@@ -225,3 +235,46 @@ class ThematicBreakParser(BlockElementParser):
         if self.is_interrupting(auxiliary) and first == '-' and not has_inner_space:
             return None
         return ThematicBreakElement()
+
+
+class LinkReferenceDefinitionsParser(BlockElementParser):
+    """link reference definitions.
+
+    A link reference definition consists of a link label, indented up
+    to three spaces, followed by a colon (:), optional whitespace
+    (including up to one line ending), a link destination, optional
+    whitespace (including up to one line ending), and an optional link
+    title, which if it is present must be separated from the link
+    destination by whitespace. No further non-whitespace characters
+    may occur on the line.
+    A link reference definition does not correspond to a structural
+    element of a document. Instead, it defines a label which can be
+    used in reference links and reference-style images elsewhere in
+    the document. Link reference definitions can come either before
+    or after the links that use them.
+    """
+
+    def __init__(self, config):
+        super(LinkReferenceDefinitionsParser, self).__init__(config)
+
+    def __parse_name(self, index):
+        frist = index
+        while index < len(self.code):
+            if self.code[index] == ']':
+                name = ''.join(self.code[first + 1: index])
+                break
+            index += 1
+        if self.code[index + 1] != ':':
+            return False, index
+        arg_name = name.strip()
+        if not arg_name:
+            return False, index
+        return True, index + 1
+
+    def parse(self, code, index, auxiliary=None):
+        self.code = code
+        success, index = self.check_indent(code, index)
+        if not success or index >= len(code):
+            return None
+        first = index
+        sucess, index = self.__parse_name(first)
