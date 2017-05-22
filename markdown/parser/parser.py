@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from markdown.parser.block_parsers import \
-    BlockElementParser, \
-    ParagraphParser, \
-    AtxHeadingParser, \
-    ThematicBreakParser
-from markdown.parser.block_elements import \
-    ParagraphElement, \
-    BlankLineElement
+from markdown.parser.block_parsers import (BlockElementParser,
+                                           ParagraphParser,
+                                           AtxHeadingParser,
+                                           ThematicBreakParser)
+from markdown.parser.block_elements import (ParagraphElement,
+                                            BlankLineElement)
 from markdown.parser.inline_parsers import InlineParser
 from markdown.parser.inline_elements import TextualContentElement
 
@@ -37,8 +35,7 @@ class Parser(object):
         self._line_num = 0
 
     def parse(self, code):
-        """
-        Parse the given code string.
+        """Parse the given code string.
 
         Args:
             code: an UTF-8 encoded string.

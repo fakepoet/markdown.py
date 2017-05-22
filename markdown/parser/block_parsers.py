@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from .parse_util import ParseUtil
+import sys
 
+from .parse_util import ParseUtil
 from .block_elements import (ParagraphElement,
                              BlankLineElement,
                              AtxHeadingElement,
@@ -10,7 +11,7 @@ from .block_elements import (ParagraphElement,
                              ThematicBreakElement,
                              LinkReferenceDefinitions)
 
-import sys
+
 if sys.version_info[0] >= 3:
     def casefold(x):
         return x.casefold()
@@ -30,8 +31,7 @@ class BlockElementParser(object):
 
     @staticmethod
     def check_indent(code, index, align=0):
-        """
-        Check whether the number of heading spaces is less than 4.
+        """Check whether the number of heading spaces is less than 4.
 
         Args:
             code: An UTF-8 string.
@@ -82,8 +82,7 @@ class BlockElementParser(object):
 
 
 class ParagraphParser(BlockElementParser):
-    """
-    The paragraph parser.
+    """The paragraph parser.
 
     A sequence of non-blank lines that cannot be interpreted as other
     kinds of blocks forms a paragraph. The contents of the paragraph are
@@ -136,8 +135,7 @@ class ParagraphParser(BlockElementParser):
 
 
 class AtxHeadingParser(BlockElementParser):
-    """
-    The ATX heading parser.
+    """The ATX heading parser.
 
     An ATX heading consists of a string of characters, parsed as inline
     content, between an opening sequence of 1–6 unescaped # characters
@@ -197,8 +195,7 @@ class AtxHeadingParser(BlockElementParser):
 
 
 class ThematicBreakParser(BlockElementParser):
-    """
-    The thematic break parser.
+    """The thematic break parser.
 
     A line consisting of 0-3 spaces of indentation, followed by a
     sequence of three or more matching -, _, or * characters, each

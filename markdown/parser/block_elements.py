@@ -40,9 +40,7 @@ class ParagraphElement(BlockElement):
 
 
 class BlankLineElement(BlockElement):
-    """
-    A virtual element used to skip empty lines.
-    """
+    """A virtual element used to skip empty lines."""
 
     def __init__(self):
         super(BlankLineElement, self).__init__()

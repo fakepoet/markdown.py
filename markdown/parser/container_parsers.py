@@ -32,8 +32,7 @@ class ContainerElementParser(object):
 
 
 class BlockQuoteMarkerParser(ContainerElementParser):
-    """
-    The block quote marker parser.
+    """The block quote marker parser.
 
     A block quote marker consists of 0-3 spaces of initial indent,
     plus (a) the character > together with a following space,
@@ -59,8 +58,7 @@ class BlockQuoteMarkerParser(ContainerElementParser):
 
 
 class ListMarkerParser(ContainerElementParser):
-    """
-    The list marker parser.
+    """The list marker parser.
 
     A list marker is a bullet list marker or an ordered list marker.
 

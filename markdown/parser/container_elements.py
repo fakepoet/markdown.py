@@ -13,18 +13,14 @@ class ContainerElement(BlockElement):
 
 
 class BlockQuoteElement(ContainerElement):
-    """
-    The block quote element.
-    """
+    """The block quote element."""
 
     def __init__(self):
         super(BlockQuoteElement, self).__init__()
 
 
 class ListElement(ContainerElement):
-    """
-    The list element.
-    """
+    """The list element."""
 
     def __init__(self):
         super(ListElement, self).__init__()
