@@ -73,3 +73,14 @@ class ThematicBreakElement(BlockElement):
     def __init__(self):
         super(ThematicBreakElement, self).__init__()
         self.close()
+
+
+class LinkReferenceDefinitions(BlockElement):
+    """The link reference difinitions."""
+
+    def __init__(self):
+        super(LinkReferenceDefinitions, self).__init__()
+        self.arg_name = None
+        self.title = None
+        self.href = None
+        self.display = ''
