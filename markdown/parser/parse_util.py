@@ -1,15 +1,13 @@
 #!/usr/bin/env python
-"""
-Some functions about characters and strings.
-"""
+# coding=utf-8
 
 
 class ParseUtil(object):
+    """Some functions about characters and strings."""
 
     @staticmethod
     def get_heading_space_num(line, index=0):
-        """
-        Get the number of spaces from a given index.
+        """Get the number of spaces from a given index.
 
         Args:
             line: The UTF-8 string.
@@ -20,10 +18,10 @@ class ParseUtil(object):
         """
         num = 0
         for c in line[index:]:
-            if c == ' ':
-                num += 1
-            elif c == '\t':
+            if c == '\t':
                 num += 4
+            elif ParseUtil.is_unicode_white_space(c):
+                num += 1
             else:
                 break
         return num
@@ -34,7 +32,8 @@ class ParseUtil(object):
 
     @staticmethod
     def is_white_space(char):
-        """
+        """Whether the character is an ASCII whitespace.
+
         A whitespace character is a space (U+0020), tab (U+0009), newline (U+000A),
         line tabulation (U+000B), form feed (U+000C), or carriage return (U+000D).
 
@@ -48,7 +47,8 @@ class ParseUtil(object):
 
     @staticmethod
     def is_unicode_white_space(char):
-        """
+        """Whether the character is an Unicode whitespace.
+
         A Unicode whitespace character is any code point in the Unicode Zs class,
         or a tab (U+0009), carriage return (U+000D), newline (U+000A), or form
         feed (U+000C).
@@ -72,7 +72,8 @@ class ParseUtil(object):
 
     @staticmethod
     def is_ascii_punctuation(char):
-        """
+        """Weather the character is an ASCII punctuation.
+
         An ASCII punctuation character is !, ", #, $, %, &, ', (, ), *, +, ,, -, .,
         /, :, ;, <, =, >, ?, @, [, \, ], ^, _, `, {, |, }, or ~.
 
@@ -91,7 +92,8 @@ class ParseUtil(object):
 
     @staticmethod
     def is_punctuation(char):
-        """
+        """Weather the character is an Unicode punctuation.
+
         A punctuation character is an ASCII punctuation character or anything in the
         Unicode classes Pc, Pd, Pe, Pf, Pi, Po, or Ps.
 
