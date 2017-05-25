@@ -9,6 +9,12 @@ from markdown import CommonHTMLPrinter
 
 class TestCommon(unittest.TestCase):
 
+    def print_tree(self, node, indent=0):
+        print(' ' * indent + str(node))
+        if hasattr(node, 'subs'):
+            for sub in node.subs:
+                self.print_tree(sub, indent + 4)
+
     def check(self, index):
         path = os.path.join('cases', 'common')
         if not os.path.exists(path):
@@ -19,14 +25,17 @@ class TestCommon(unittest.TestCase):
         output_path = os.path.join(path, str(index) + '.out')
         with codecs.open(output_path, 'r', 'utf8') as reader:
             standard_output = reader.read()
-        parsed = Parser.parse(standard_input)
-        html = str(CommonHTMLPrinter(parsed))
+        parser = Parser()
+        parsed = parser.parse(standard_input)
+        printer = CommonHTMLPrinter()
+        html = printer.to_html(parsed)
         message = 'Common: ' + str(index) + '\n'
         message += '=' * 80 + '\n'
-        message += standard_output
+        message += standard_output.replace(' ', '.')
         message += '-' * 80 + '\n'
-        message += html
+        message += html.replace(' ', '.')
         message += '=' * 80 + '\n'
+        self.print_tree(parsed)
         self.assertEqual(standard_output, html, message)
 
     def test_commons(self):
@@ -40,7 +49,9 @@ class TestCommon(unittest.TestCase):
             (47, 49),
             (52, 53),
             (55, 56),
-            (180, 184),
+            (180, 185),
+            (187, 188),
+            (618, 622),
         ]
         for interval in intervals:
             for index in range(interval[0], interval[1] + 1):
