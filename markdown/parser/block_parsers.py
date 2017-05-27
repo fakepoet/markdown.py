@@ -49,8 +49,7 @@ class BlockElementParser(object):
         return True, index + space_num
 
     def get_unclosed(self, auxiliary):
-        """
-        Get last unclosed element.
+        """Get last unclosed element.
 
         Args:
             auxiliary: A dict.
@@ -65,8 +64,7 @@ class BlockElementParser(object):
         return auxiliary[self.AUX_UNCLOSED]
 
     def is_interrupting(self, auxiliary):
-        """
-        Whether it is interrupting a paragraph.
+        """Whether it is interrupting a paragraph.
 
         Args:
             auxiliary: A dict.
