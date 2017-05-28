@@ -12,7 +12,8 @@ class ContainerElementParser(object):
     AUX_ALIGN = 'align'  # The align offset for lists.
 
     def __init__(self, config):
-        super(ContainerElementParser, self).__init__(config)
+        super(ContainerElementParser, self).__init__()
+        self.config = config
 
     def get_align(self, auxiliary):
         """
