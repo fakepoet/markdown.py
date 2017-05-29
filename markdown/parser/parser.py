@@ -139,6 +139,15 @@ class Parser(object):
         return False
 
     def parse_blocks(self, line, index):
+        """Parse block elements.
+
+        Args:
+            line: line of code.
+            index: start index
+
+        Returns:
+            None
+        """
         for block_parser in self._block_parsers:
             elem = block_parser.parse(line, index)
             if elem is not None:
