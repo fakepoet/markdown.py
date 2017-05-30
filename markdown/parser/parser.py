@@ -158,6 +158,14 @@ class Parser(object):
                 break
 
     def parse_subs(self, elem):
+        """Parse span elements recursively.
+
+        Args:
+            elem: the elements that contain sub-elements.
+
+        Returns:
+            The parsed element.
+        """
         if isinstance(elem, TextualContentElement):
             return elem
         try:
