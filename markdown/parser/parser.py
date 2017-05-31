@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+from markdown.parser.container_parsers import (ContainerElementParser,
+                                               BlockQuoteMarkerParser,
+                                               ListMarkerParser)
+from markdown.parser.container_elements import (BlockQuoteElement,
+                                                ListElement)
 from markdown.parser.block_parsers import (BlockElementParser,
                                            ParagraphParser,
                                            AtxHeadingParser,
@@ -23,8 +28,8 @@ class Parser(object):
         self._blocks = []  # The parsed block elements.
 
         self._paragraph_parser = ParagraphParser(config)
-        # self._block_quote_marker_parser = BlockQuoteMarkerParser(config)
-        # self._list_marker_parser = ListMarkerParser(config)
+        self._block_quote_marker_parser = BlockQuoteMarkerParser(config)
+        self._list_marker_parser = ListMarkerParser(config)
         self._interrupt_parsers = []
         self._container_parsers = []
         self._block_parsers = []
@@ -104,6 +109,15 @@ class Parser(object):
         return 0
 
     def parse_continuation(self, line, index):
+        """Continue parsing block elements that could span multiple lines.
+
+        Args:
+            line: line of code.
+            index: start index
+
+        Returns:
+            Returns true if succeed, otherwise false.
+        """
         if len(self._blocks) > 0 and not self._blocks[-1].closed:
             if isinstance(self._blocks[-1], ParagraphElement):
                 has_interrupted = False
@@ -125,6 +139,15 @@ class Parser(object):
         return False
 
     def parse_blocks(self, line, index):
+        """Parse block elements.
+
+        Args:
+            line: line of code.
+            index: start index
+
+        Returns:
+            None
+        """
         for block_parser in self._block_parsers:
             elem = block_parser.parse(line, index)
             if elem is not None:
@@ -135,6 +158,14 @@ class Parser(object):
                 break
 
     def parse_subs(self, elem):
+        """Parse span elements recursively.
+
+        Args:
+            elem: the elements that contain sub-elements.
+
+        Returns:
+            The parsed element.
+        """
         if isinstance(elem, TextualContentElement):
             return elem
         try:
