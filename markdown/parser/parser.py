@@ -11,7 +11,8 @@ from markdown.parser.block_parsers import (BlockElementParser,
                                            AtxHeadingParser,
                                            ThematicBreakParser)
 from markdown.parser.block_elements import (ParagraphElement,
-                                            BlankLineElement)
+                                            BlankLineElement,
+                                            ThematicBreakElement)
 from markdown.parser.inline_parsers import InlineParser
 from markdown.parser.inline_elements import TextualContentElement
 
@@ -78,9 +79,9 @@ class Parser(object):
             # HtmlBlockParser(config)  # Type 1-6,
         ]
         self._container_parsers = [
-            # BlockQuoteParser(config),
-            # BulletListParser(config),
-            # OrderedListParser(config),
+            thematic_break_parser,
+            BlockQuoteMarkerParser(config),
+            ListMarkerParser(config),
         ]
         self._block_parsers = [
             thematic_break_parser,
@@ -89,11 +90,14 @@ class Parser(object):
         ]
 
     def parse_container_markers(self, line):
-        """
         index = 0
         layer_index = 0
         while False:
             elem, index = self._block_quote_marker_parser.parse(line, index)
+            if isinstance(elem, ThematicBreakElement):
+                elem.line_num = self._line_num
+                self._blocks.append(elem)
+                return len(line)
             if not elem:
                 offset = 0
                 if layer_index < len(self._layers) and \
@@ -105,8 +109,6 @@ class Parser(object):
                 if not elem:
                     break
         return index
-        """
-        return 0
 
     def parse_continuation(self, line, index):
         """Continue parsing block elements that could span multiple lines.
