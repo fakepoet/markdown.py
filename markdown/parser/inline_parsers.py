@@ -9,7 +9,8 @@ class InlineParser(object):
     def __init__(self):
         pass
 
-    def parse(self, code):
+    @staticmethod
+    def parse(code):
         elem = TextualContentElement()
         elem.subs = [code]
         return elem

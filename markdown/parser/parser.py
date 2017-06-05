@@ -11,7 +11,8 @@ from markdown.parser.block_parsers import (BlockElementParser,
                                            AtxHeadingParser,
                                            ThematicBreakParser)
 from markdown.parser.block_elements import (ParagraphElement,
-                                            BlankLineElement)
+                                            BlankLineElement,
+                                            ThematicBreakElement)
 from markdown.parser.inline_parsers import InlineParser
 from markdown.parser.inline_elements import TextualContentElement
 
@@ -27,14 +28,10 @@ class Parser(object):
 
         self._blocks = []  # The parsed block elements.
 
-        self._paragraph_parser = ParagraphParser(config)
-        self._block_quote_marker_parser = BlockQuoteMarkerParser(config)
-        self._list_marker_parser = ListMarkerParser(config)
         self._interrupt_parsers = []
         self._container_parsers = []
         self._block_parsers = []
-        self._inline_parse = InlineParser()
-        self.init_parsers(config)
+        self.init_parsers()
 
         self._layers = []
         self._line_num = 0
@@ -68,45 +65,44 @@ class Parser(object):
         self._blocks = [self.parse_subs(block) for block in self._blocks]
         return self._blocks
 
-    def init_parsers(self, config):
-        thematic_break_parser = ThematicBreakParser(config)
-        atx_heading_parser = AtxHeadingParser(config)
+    def init_parsers(self):
         self._interrupt_parsers = [
-            thematic_break_parser,
-            atx_heading_parser,
+            ThematicBreakParser,
+            AtxHeadingParser,
             # FencedCodeBlockParser(config),
             # HtmlBlockParser(config)  # Type 1-6,
         ]
         self._container_parsers = [
-            # BlockQuoteParser(config),
-            # BulletListParser(config),
-            # OrderedListParser(config),
+            ThematicBreakParser,
+            BlockQuoteMarkerParser,
+            ListMarkerParser,
         ]
         self._block_parsers = [
-            thematic_break_parser,
-            atx_heading_parser,
-            self._paragraph_parser,
+            ThematicBreakParser,
+            AtxHeadingParser,
+            ParagraphParser,
         ]
 
     def parse_container_markers(self, line):
-        """
         index = 0
         layer_index = 0
         while False:
-            elem, index = self._block_quote_marker_parser.parse(line, index)
+            elem, index = BlockQuoteMarkerParser.parse(line, index)
+            if isinstance(elem, ThematicBreakElement):
+                elem.line_num = self._line_num
+                self._blocks.append(elem)
+                return len(line)
             if not elem:
                 offset = 0
                 if layer_index < len(self._layers) and \
                         isinstance(self._layers[layer_index], BlockQuoteElement):
                     offset = self._layers[layer_index].offset()
-                elem, index = self._list_marker_parser.parse(line, index, {
+                elem, index = ListMarkerParser.parse(line, index, {
                     ContainerElementParser.AUX_ALIGN: offset
                 })
                 if not elem:
                     break
         return index
-        """
-        return 0
 
     def parse_continuation(self, line, index):
         """Continue parsing block elements that could span multiple lines.
@@ -132,7 +128,7 @@ class Parser(object):
                         self._blocks.append(elem)
                         break
                 if not has_interrupted:
-                    self._blocks[-1] = self._paragraph_parser.parse(line, index, {
+                    self._blocks[-1] = ParagraphParser.parse(line, index, {
                         BlockElementParser.AUX_UNCLOSED: self._blocks[-1]
                     })
             return True
@@ -170,7 +166,7 @@ class Parser(object):
             return elem
         try:
             for i, sub in enumerate(elem.subs):
-                elem.subs[i] = self.parse_subs(self._inline_parse.parse(sub))
+                elem.subs[i] = self.parse_subs(InlineParser.parse(sub))
         except AttributeError:
             pass
         return elem
