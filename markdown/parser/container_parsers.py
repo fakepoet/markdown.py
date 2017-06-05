@@ -11,10 +11,7 @@ class ContainerElementParser(object):
 
     AUX_ALIGN = 'align'  # The align offset for lists.
 
-    def __init__(self, config):
-        super(ContainerElementParser, self).__init__()
-        self.config = config
-
+    @staticmethod
     def get_align(self, auxiliary):
         """
         Get the align offset.
@@ -27,9 +24,9 @@ class ContainerElementParser(object):
         """
         if auxiliary is None:
             return 0
-        if self.AUX_ALIGN not in auxiliary:
+        if ContainerElementParser.AUX_ALIGN not in auxiliary:
             return 0
-        return int(auxiliary[self.AUX_ALIGN])
+        return int(auxiliary[ContainerElementParser.AUX_ALIGN])
 
 
 class BlockQuoteMarkerParser(ContainerElementParser):
@@ -40,9 +37,7 @@ class BlockQuoteMarkerParser(ContainerElementParser):
     or (b) a single character > not followed by a space.
     """
 
-    def __init__(self, config):
-        super(BlockQuoteMarkerParser, self).__init__(config)
-
+    @staticmethod
     def parse(self, code, index, _=None):
         start = index
         # 0~3 spaces
@@ -69,9 +64,7 @@ class ListMarkerParser(ContainerElementParser):
     followed by either a . character or a ) character.
     """
 
-    def __init__(self, config):
-        super(ListMarkerParser, self).__init__(config)
-
+    @staticmethod
     def parse(self, code, index, auxiliary=None):
         start = index
         # 0~3 spaces

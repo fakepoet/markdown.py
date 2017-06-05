@@ -8,8 +8,7 @@ from .block_elements import (ParagraphElement,
                              BlankLineElement,
                              AtxHeadingElement,
                              SetextHeadingElement,
-                             ThematicBreakElement,
-                             LinkReferenceDefinitions)
+                             ThematicBreakElement)
 
 
 if sys.version_info[0] >= 3:
@@ -25,9 +24,6 @@ class BlockElementParser(object):
 
     AUX_UNCLOSED = 'unclosed'    # The last unclosed element.
     AUX_INTERRUPT = 'interrupt'  # Whether it is interrupting a paragraph.
-
-    def __init__(self, config):
-        self._config = config
 
     @staticmethod
     def check_indent(code, index, align=0):
@@ -48,7 +44,8 @@ class BlockElementParser(object):
             return False, index
         return True, index + space_num
 
-    def get_unclosed(self, auxiliary):
+    @staticmethod
+    def get_unclosed(auxiliary):
         """Get last unclosed element.
 
         Args:
@@ -59,11 +56,12 @@ class BlockElementParser(object):
         """
         if auxiliary is None:
             return None
-        if self.AUX_UNCLOSED not in auxiliary:
+        if BlockElementParser.AUX_UNCLOSED not in auxiliary:
             return None
-        return auxiliary[self.AUX_UNCLOSED]
+        return auxiliary[BlockElementParser.AUX_UNCLOSED]
 
-    def is_interrupting(self, auxiliary):
+    @staticmethod
+    def is_interrupting(auxiliary):
         """Whether it is interrupting a paragraph.
 
         Args:
@@ -74,9 +72,9 @@ class BlockElementParser(object):
         """
         if auxiliary is None:
             return False
-        if self.AUX_INTERRUPT not in auxiliary:
+        if BlockElementParser.AUX_INTERRUPT not in auxiliary:
             return False
-        return auxiliary[self.AUX_INTERRUPT]
+        return auxiliary[BlockElementParser.AUX_INTERRUPT]
 
 
 class ParagraphParser(BlockElementParser):
@@ -89,14 +87,12 @@ class ParagraphParser(BlockElementParser):
     removing initial and final whitespace.
     """
 
-    def __init__(self, config):
-        super(ParagraphParser, self).__init__(config)
-
-    def parse(self, code, index, auxiliary=None):
-        elem = self.get_unclosed(auxiliary)
+    @staticmethod
+    def parse(code, index, auxiliary=None):
+        elem = BlockElementParser.get_unclosed(auxiliary)
         start = index
         if elem is None:
-            success, index = self.check_indent(code, index)
+            success, index = BlockElementParser.check_indent(code, index)
             if not success:
                 return None
         while index < len(code) and code[index] != '\n':
@@ -147,12 +143,10 @@ class AtxHeadingParser(BlockElementParser):
     to the number of # characters in the opening sequence.
     """
 
-    def __init__(self, config):
-        super(AtxHeadingParser, self).__init__(config)
-
-    def parse(self, code, index, _=None):
+    @staticmethod
+    def parse(code, index, _=None):
         # 0~3 spaces
-        success, index = self.check_indent(code, index)
+        success, index = BlockElementParser.check_indent(code, index)
         if not success:
             return None
         # 1~6 `#`s
@@ -200,11 +194,9 @@ class ThematicBreakParser(BlockElementParser):
     followed optionally by any number of spaces, forms a thematic break.
     """
 
-    def __init__(self, config):
-        super(ThematicBreakParser, self).__init__(config)
-
-    def parse(self, code, index, auxiliary=None):
-        success, index = self.check_indent(code, index)
+    @staticmethod
+    def parse(code, index, auxiliary=None):
+        success, index = BlockElementParser.check_indent(code, index)
         if not success:
             return None
         if index >= len(code):
@@ -227,49 +219,6 @@ class ThematicBreakParser(BlockElementParser):
             index += 1
         if count < 3:
             return None
-        if self.is_interrupting(auxiliary) and first == '-' and not has_inner_space:
+        if BlockElementParser.is_interrupting(auxiliary) and first == '-' and not has_inner_space:
             return None
         return ThematicBreakElement()
-
-
-class LinkReferenceDefinitionsParser(BlockElementParser):
-    """link reference definitions.
-
-    A link reference definition consists of a link label, indented up
-    to three spaces, followed by a colon (:), optional whitespace
-    (including up to one line ending), a link destination, optional
-    whitespace (including up to one line ending), and an optional link
-    title, which if it is present must be separated from the link
-    destination by whitespace. No further non-whitespace characters
-    may occur on the line.
-    A link reference definition does not correspond to a structural
-    element of a document. Instead, it defines a label which can be
-    used in reference links and reference-style images elsewhere in
-    the document. Link reference definitions can come either before
-    or after the links that use them.
-    """
-
-    def __init__(self, config):
-        super(LinkReferenceDefinitionsParser, self).__init__(config)
-
-    def __parse_name(self, index):
-        frist = index
-        while index < len(self.code):
-            if self.code[index] == ']':
-                name = ''.join(self.code[first + 1: index])
-                break
-            index += 1
-        if self.code[index + 1] != ':':
-            return False, index
-        arg_name = name.strip()
-        if not arg_name:
-            return False, index
-        return True, index + 1
-
-    def parse(self, code, index, auxiliary=None):
-        self.code = code
-        success, index = self.check_indent(code, index)
-        if not success or index >= len(code):
-            return None
-        first = index
-        sucess, index = self.__parse_name(first)

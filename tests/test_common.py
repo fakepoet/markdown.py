@@ -31,6 +31,8 @@ class TestCommon(unittest.TestCase):
         html = printer.to_html(parsed)
         message = 'Common: ' + str(index) + '\n'
         message += '=' * 80 + '\n'
+        message += standard_input.replace(' ', '.')
+        message += '-' * 80 + '\n'
         message += standard_output.replace(' ', '.')
         message += '-' * 80 + '\n'
         message += html.replace(' ', '.')
